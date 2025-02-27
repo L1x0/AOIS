@@ -2,17 +2,7 @@ package by.astakhau.binarycode;
 
 public class BinaryOperations {
 
-    public static class DivisionResult {
-        public final boolean[] integerPart;
-        public final boolean[] fractionalPart;
-
-        public DivisionResult(boolean[] integerPart, boolean[] fractionalPart) {
-            this.integerPart = integerPart;
-            this.fractionalPart = fractionalPart;
-        }
-    }
-
-    public static DivisionResult divide(int dividendNum, int divisorNum) {
+    public static BinaryNumber.FloatBinary divide(int dividendNum, int divisorNum) {
         int precision = 5;
 
         if (divisorNum == 0) {
@@ -81,7 +71,7 @@ public class BinaryOperations {
         }
 
 
-        return new DivisionResult(resultInteger, fraction);
+        return new BinaryNumber.FloatBinary(resultInteger, fraction);
     }
 
     private static boolean[] leftShiftOneBit(boolean[] bits) {
@@ -141,6 +131,66 @@ public class BinaryOperations {
         }
 
         return result;
+    }
+
+    public static boolean[] addIEEE754(float aNum, float bNum) {
+        boolean[] a = BinaryNumber.floatToIEEE754(aNum);
+        boolean[] b = BinaryNumber.floatToIEEE754(bNum);
+
+        // Извлекаем экспоненты (8 бит) и переводим их в целые числа.
+        int expA = bitsToInt(a, 1, 8);
+        int expB = bitsToInt(b, 1, 8);
+        int E1 = expA - 127; // действительный порядок
+        int E2 = expB - 127;
+
+        // Извлекаем дробную часть и добавляем неявную единицу: получаем 24-битное число.
+        int fracA = (1 << 23) | bitsToInt(a, 9, 23);
+        int fracB = (1 << 23) | bitsToInt(b, 9, 23);
+
+        // Выравниваем экспоненты: сдвигаем мантиссу меньшего числа вправо.
+        int commonExp = Math.max(E1, E2);
+        if (E1 < commonExp) {
+            fracA = fracA >> (commonExp - E1);
+        }
+        if (E2 < commonExp) {
+            fracB = fracB >> (commonExp - E2);
+        }
+
+        // Складываем мантиссы (24-битные числа)
+        int sumMantissa = fracA + fracB;
+
+        // Нормализация: если сумма превышает диапазон 24 бит (т.е. если суммарная мантисса >= 2^24),
+        // сдвигаем её вправо и увеличиваем порядок.
+        if (sumMantissa >= (1 << 24)) {
+            sumMantissa = sumMantissa >> 1;
+            commonExp++;
+        }
+
+        // Результирующая экспонента = commonExp + 127.
+        int resultExp = commonExp + 127;
+        // Дробная часть результата – младшие 23 бита sumMantissa (без неявной единицы)
+        int resultFraction = sumMantissa & ((1 << 23) - 1);
+
+        // Собираем итоговое представление: положительное число (знак = 0), затем 8 бит экспоненты, 23 бита дробной части.
+        boolean[] result = new boolean[32];
+        result[0] = false; // знак 0
+        // Записываем экспоненту (8 бит)
+        for (int i = 0; i < 8; i++) {
+            result[i + 1] = ((resultExp >>> (7 - i)) & 1) == 1;
+        }
+        // Записываем дробную часть (23 бита)
+        for (int i = 0; i < 23; i++) {
+            result[i + 9] = ((resultFraction >>> (22 - i)) & 1) == 1;
+        }
+        return result;
+    }
+
+    private static int bitsToInt(boolean[] bits, int start, int len) {
+        int value = 0;
+        for (int i = start; i < start + len; i++) {
+            value = (value << 1) | (bits[i] ? 1 : 0);
+        }
+        return value;
     }
 
     public static boolean[] sum(boolean[] A, boolean[] B) {
