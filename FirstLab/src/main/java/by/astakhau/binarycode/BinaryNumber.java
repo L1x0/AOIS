@@ -5,8 +5,8 @@ import lombok.Getter;
 
 public class BinaryNumber {
     private long inDecimal;
-    private boolean[] inDirect = new boolean[32];
-    private boolean[] inReverse = new boolean[32];
+    @Getter private boolean[] inDirect = new boolean[32];
+    @Getter private boolean[] inReverse = new boolean[32];
     @Getter private boolean[] inAdditional = new boolean[32];
     @Getter private boolean[] changedSignAdditional = new boolean[32];
 
@@ -107,5 +107,28 @@ public class BinaryNumber {
             changedSignAdditional[i] = !changedSignAdditional[i];
         }
         changedSignAdditional = BinaryOperations.createAdditionalCode(changedSignAdditional);
+    }
+
+    public static String convertDivisionToString(BinaryOperations.DivisionResult result) {
+        StringBuilder sb = new StringBuilder();
+        
+        // Знак
+        sb.append(result.integerPart[0] ? "1" : "0");
+        sb.append("  ");
+        
+        // Целая часть (26 бит)
+        for (int i = 1; i < 27; i++) {
+            sb.append(result.integerPart[i] ? "1" : "0");
+        }
+        
+        // Точка
+        sb.append(".");
+        
+        // Дробная часть (5 бит)
+        for (boolean b : result.fractionalPart) {
+            sb.append(b ? "1" : "0");
+        }
+        
+        return sb.toString();
     }
 }
