@@ -11,8 +11,11 @@ public class TrueTable {
     List<String> prefixExp;
     List<String> variables;
     ArrayList<ArrayList<String>> table;
+
     Map<Integer, String> operationIndex = new HashMap<>();
     Map<Integer, Boolean> employedIndexes = new HashMap<>();
+
+    Map<Integer, String> operationResultByIndex = new HashMap<>();
 
     TrueTable(String exp) {
         this.exp = exp;
@@ -20,6 +23,10 @@ public class TrueTable {
         prefixExp = LogicalExpressionParser.infixToRPN(exp);
         variables = LogicalExpressionParser.getVariables(exp);
         table = createTable();
+    }
+
+    public ArrayList<ArrayList<String>> getTable() {
+        return table;
     }
 
     private ArrayList<ArrayList<String>> createTable() {
@@ -200,7 +207,82 @@ public class TrueTable {
     private ArrayList<ArrayList<String>> solveAllExpression(ArrayList<ArrayList<String>> table) {
         ArrayList<ArrayList<String>> result = table;
 
+        for (int i = 1; i < result.size(); i++) {
+            ArrayList<String> tempPrefix = new ArrayList<>(prefixExp);
 
+            for (int j = 0; j < variables.size(); j++) {
+
+                int finalJ = j;
+                int finalI = i;
+
+                tempPrefix.replaceAll(s -> s.equals(result.get(0).get(finalJ)) ? result.get(finalI).get(finalJ) : s);
+            }
+
+            result.get(i).addAll(solveOnePrefix(tempPrefix));
+        }
+
+
+        return result;
+    }
+
+    private ArrayList<String> solveOnePrefix(List<String> prefix) {
+        ArrayList<String> result = new ArrayList<>();
+        employedIndexes = new HashMap<>();
+
+        for (int i = 0; i < prefix.size(); i++) {
+            String first, second;
+            if (LogicalExpressionParser.isOperator(prefix.get(i)) && !prefix.get(i).equals("!")) {
+                int j;
+                for (j = 1; employedIndexes.containsKey(i - j); j++) {}
+
+                if (operationResultByIndex.containsKey(i - j)) {
+                    second = operationResultByIndex.get(i - j);
+
+                    employedIndexes.put(i - j, true);
+                } else {
+                    second = prefix.get(i - j);
+
+                    employedIndexes.put(i - j, true);
+                }
+
+                for (j = 2; employedIndexes.containsKey(i - j); j++) {}
+
+                if (operationResultByIndex.containsKey(i - j)) {
+                    first = operationResultByIndex.get(i - j);
+
+                    employedIndexes.put(i - j, true);
+                } else {
+                    first = prefix.get(i - j);
+
+                    employedIndexes.put(i - j, true);
+                }
+
+                result.add(solveSubexpression(first, second, prefix.get(i)) ? "1" : "0");
+                if (prefix.get(i).equals("-")) {
+                    employedIndexes.put(i, true);
+                    operationResultByIndex.put(i + 1, solveSubexpression(first, second, prefix.get(i)) ? "1" : "0");
+                } else {
+                    operationResultByIndex.put(i, solveSubexpression(first, second, prefix.get(i)) ? "1" : "0");
+                }
+
+            } if (prefix.get(i).equals("!")) {
+                int j;
+                for (j = 1; employedIndexes.containsKey(i - j); j++) {}
+
+                if (operationResultByIndex.containsKey(i - j)) {
+                    second = operationResultByIndex.get(i - j);
+
+                    employedIndexes.put(i - j, true);
+                } else {
+                    second = prefix.get(i - j);
+
+                    employedIndexes.put(i - j, true);
+                }
+
+                result.add(solveSubexpression(second, second, prefix.get(i)) ? "1" : "0");
+                operationResultByIndex.put(i, solveSubexpression(second, second, prefix.get(i)) ? "1" : "0");
+            }
+        }
 
         return result;
     }
@@ -230,17 +312,25 @@ public class TrueTable {
         return table;
     }
 
+    public List<String> getVariables() {
+        return variables;
+    }
+
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-
-        for (ArrayList<String> row : table) {
-            for (String exp : row) {
-                result.append(exp).append("          ");
-            }
-            result.append("\n");
+        if (table == null || table.isEmpty()) {
+            return "";
         }
 
-        return result.toString();
+        StringBuilder sb = new StringBuilder();
+        for (List<String> row : table) {
+            for (String cell : row) {
+                // Каждая ячейка имеет фиксированную ширину 30 символов, выравнивание по левому краю
+                sb.append(String.format("%-20s", cell));
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
+
 }

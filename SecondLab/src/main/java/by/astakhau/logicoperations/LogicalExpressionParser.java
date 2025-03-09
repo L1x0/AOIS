@@ -76,8 +76,6 @@ public class LogicalExpressionParser {
 
         for (String token : tokens) {
             if (isVariable(token)) {
-                // При встрече переменной выводим её и добавляем в выходной список.
-                System.out.println("Переменная обнаружена: " + token);
                 output.add(token);
             } else if (isOperator(token)) {
                 // Обработка операторов.
@@ -97,7 +95,7 @@ public class LogicalExpressionParser {
                 if (!stack.isEmpty() && stack.peek().equals("(")) {
                     stack.pop(); // удаляем открывающую скобку
                 } else {
-                    System.out.println("Ошибка: несогласованные скобки");
+                    throw new IllegalArgumentException("несогласованные скобки");
                 }
             }
         }
@@ -106,7 +104,7 @@ public class LogicalExpressionParser {
         while (!stack.isEmpty()) {
             String op = stack.pop();
             if (op.equals("(") || op.equals(")")) {
-                System.out.println("Ошибка: несогласованные скобки");
+                throw new IllegalArgumentException("несогласованные скобки");
             } else {
                 output.add(op);
             }
@@ -119,7 +117,7 @@ public class LogicalExpressionParser {
         List<String> result = new ArrayList<>();
 
         for (String token : tokenize(expression)) {
-            if (isVariable(token)) {
+            if (isVariable(token) && !result.contains(token)) {
                 result.add(token);
             }
         }
