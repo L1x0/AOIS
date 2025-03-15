@@ -4,9 +4,13 @@ import java.util.ArrayList;
 
 public class Forms {
     private TrueTable tableObj;
-    private ArrayList<ArrayList<String>> table;
-    private String PDNF, PCNF, numericPDNF, numericPCNF, indexForm;
-    private int varCount;
+    private final ArrayList<ArrayList<String>> table;
+    private final String PDNF;
+    private final String PCNF;
+    private final String numericPDNF;
+    private final String numericPCNF;
+    private final String indexForm;
+    private final int varCount;
 
 
     public Forms(TrueTable tableObj) {

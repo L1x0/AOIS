@@ -12,22 +12,18 @@ public class BinaryNumber {
 
         boolean sign = fb.integerPart[0];
 
-        // 2. Вычисляем модуль целой части (26 бит)
         int integerMagnitude = 0;
         for (int i = 1; i < 27; i++) {
             integerMagnitude = (integerMagnitude << 1) | (fb.integerPart[i] ? 1 : 0);
         }
 
-        // 3. Вычисляем значение дробной части (5 бит)
         double fractionalValue = 0.0;
-        // Для дробной части: индекс 0 соответствует 1/2, 1 – 1/4, 2 – 1/8, 3 – 1/16, 4 – 1/32.
         for (int i = 0; i < 5; i++) {
             if (fb.fractionalPart[i]) {
-                fractionalValue += 1.0 / (1 << (i + 1)); // (i+1) потому что 1<<1 == 2, 1<<2 == 4, и т.д.
+                fractionalValue += 1.0 / (1 << (i + 1));
             }
         }
 
-        // 4. Итоговое значение = модуль целой части + дробная часть, с учетом знака
         double value = integerMagnitude + fractionalValue;
         return result.append(sign ? -value : value).toString();
     }
@@ -41,14 +37,11 @@ public class BinaryNumber {
             throw new IllegalArgumentException("Массив должен быть длины 32");
         }
         int value = 0;
-        // bits[1]..bits[31] представляют модуль числа:
         for (int i = 1; i < 32; i++) {
             if (code[i]) {
-                // Вес бита: 2^(31-i)
                 value += (1 << (31 - i));
             }
         }
-        // Если знак равен true, число отрицательное
         result.append(code[0] ? -value : value);
         return result.toString();
     }
@@ -258,20 +251,13 @@ public class BinaryNumber {
             v *= 2.0f;
             E--;
         }
-        // Теперь v находится в диапазоне [1, 2).
-        // 3. Дробная часть мантиссы = v - 1.
         float fPart = v - 1.0f;
-        // 4. Получаем 23-битное представление дробной части: floor(fPart * 2^23)
         int fractionInt = (int) (fPart * (1 << 23));
-        // 5. Вычисляем экспоненту с учётом смещения: exponentField = E + 127.
         int exponentField = E + 127;
 
-        // 6. Записываем экспоненту (8 бит) в bits[1..8]:
         for (int i = 0; i < 8; i++) {
-            // От старшего (i=0) к младшему (i=7)
             bits[i + 1] = ((exponentField >>> (7 - i)) & 1) == 1;
         }
-        // 7. Записываем дробную часть (23 бита) в bits[9..31]:
         for (int i = 0; i < 23; i++) {
             bits[i + 9] = ((fractionInt >>> (22 - i)) & 1) == 1;
         }
