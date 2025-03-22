@@ -10,7 +10,7 @@ public class TrueTable {
 
     List<String> prefixExp;
     List<String> variables;
-    ArrayList<ArrayList<String>> table;
+    List<ArrayList<String>> table;
 
     Map<Integer, String> operationIndex = new HashMap<>();
     Map<Integer, Boolean> employedIndexes = new HashMap<>();
@@ -26,7 +26,7 @@ public class TrueTable {
     }
 
     public ArrayList<ArrayList<String>> getTable() {
-        return table;
+        return (ArrayList<ArrayList<String>>) table;
     }
 
     private ArrayList<ArrayList<String>> createTable() {

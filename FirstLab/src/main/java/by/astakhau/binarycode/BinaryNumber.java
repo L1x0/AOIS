@@ -4,6 +4,10 @@ package by.astakhau.binarycode;
 import lombok.Getter;
 
 public class BinaryNumber {
+    private static final int NUMBER_SIZE = 32;
+    private static final int EXPONENT_SIZE = 8;
+    private static final int FRACTION_SIZE = 23;
+    private static final int EXPONENT_BIAS = 127;
 
     public static String convertDivisionToStringWithOriginal(FloatBinary fb) {
         StringBuilder result = new StringBuilder();
@@ -13,7 +17,7 @@ public class BinaryNumber {
         boolean sign = fb.integerPart[0];
 
         int integerMagnitude = 0;
-        for (int i = 1; i < 27; i++) {
+        for (int i = 1; i < NUMBER_SIZE - 5; i++) {
             integerMagnitude = (integerMagnitude << 1) | (fb.integerPart[i] ? 1 : 0);
         }
 
@@ -33,13 +37,13 @@ public class BinaryNumber {
         result.append(getCode(code));
         result.append("\n");
 
-        if (code.length != 32) {
+        if (code.length != NUMBER_SIZE) {
             throw new IllegalArgumentException("Массив должен быть длины 32");
         }
         int value = 0;
-        for (int i = 1; i < 32; i++) {
+        for (int i = 1; i < NUMBER_SIZE; i++) {
             if (code[i]) {
-                value += (1 << (31 - i));
+                value += (1 << (NUMBER_SIZE - 1 - i));
             }
         }
         result.append(code[0] ? -value : value);
@@ -58,13 +62,13 @@ public class BinaryNumber {
 
     private long inDecimal;
     @Getter
-    private boolean[] inDirect = new boolean[32];
+    private boolean[] inDirect = new boolean[NUMBER_SIZE];
     @Getter
-    private boolean[] inReverse = new boolean[32];
+    private boolean[] inReverse = new boolean[NUMBER_SIZE];
     @Getter
-    private boolean[] inAdditional = new boolean[32];
+    private boolean[] inAdditional = new boolean[NUMBER_SIZE];
     @Getter
-    private boolean[] changedSignAdditional = new boolean[32];
+    private boolean[] changedSignAdditional = new boolean[NUMBER_SIZE];
 
     public BinaryNumber(long inDecimal) {
         this.inDecimal = inDecimal;
@@ -75,7 +79,7 @@ public class BinaryNumber {
     }
 
     public boolean[] toDirect() {
-        boolean[] result = new boolean[32];
+        boolean[] result = new boolean[NUMBER_SIZE];
         var temp = inDecimal;
 
         if (temp < 0) {
@@ -133,7 +137,7 @@ public class BinaryNumber {
         result.append(code[0] ? 1 : 0);
         result.append("  ");
 
-        for (int i = 1; i < 32; i++) {
+        for (int i = 1; i < NUMBER_SIZE; i++) {
             result.append(code[i] ? "1" : "0");
         }
 
@@ -157,18 +161,18 @@ public class BinaryNumber {
         result.append(getCode(code));
         result.append("\n");
 
-        if (code.length != 32) {
-            throw new IllegalArgumentException("Массив должен быть длины 32");
+        if (code.length != NUMBER_SIZE) {
+            throw new IllegalArgumentException("Массив должен быть длины NUMBER_SIZE");
         }
         int value = 0;
         // Если старший бит (бит знака) равен 1, добавляем -2^(31)
         if (code[0]) {
-            value = -(1 << 31);
+            value = -(1 << NUMBER_SIZE - 1);
         }
         // Добавляем взвешенные значения остальных битов
-        for (int i = 1; i < 32; i++) {
+        for (int i = 1; i < NUMBER_SIZE; i++) {
             if (code[i]) {
-                value += (1 << (31 - i));
+                value += (1 << (NUMBER_SIZE - 1 - i));
             }
         }
 
@@ -184,7 +188,7 @@ public class BinaryNumber {
 
         changedSignAdditional = inAdditional.clone();
         changedSignAdditional[0] = true;
-        for (int i = 1; i < 32; i++) {
+        for (int i = 1; i < NUMBER_SIZE; i++) {
             changedSignAdditional[i] = !changedSignAdditional[i];
         }
         changedSignAdditional = BinaryOperations.createAdditionalCode(changedSignAdditional);
@@ -195,20 +199,19 @@ public class BinaryNumber {
         result.append(getCode(code));
         result.append("\n");
 
-        if (code.length != 32) {
+        if (code.length != NUMBER_SIZE) {
             throw new IllegalArgumentException("Массив должен быть длины 32");
         }
-        // 1. Знак
         boolean sign = code[0];
-        // 2. Экспонента (8 бит)
+
         int exp = 0;
         for (int i = 1; i <= 8; i++) {
             exp = (exp << 1) | (code[i] ? 1 : 0);
         }
-        // 3. Дробная часть мантиссы (23 бита)
+
         float fraction = 0.0f;
         float factor = 0.5f;
-        for (int i = 9; i < 32; i++) {
+        for (int i = 9; i < NUMBER_SIZE; i++) {
             if (code[i]) {
                 fraction += factor;
             }
@@ -217,69 +220,65 @@ public class BinaryNumber {
 
         float value;
         if (exp == 0) {
-            // Денормализованное число
-            value = fraction * (float)Math.pow(2, -126);
+            value = fraction * (float) Math.pow(2, -126);
         } else if (exp == 0xFF) {
-            // Специальные случаи (бесконечность, NaN) – не рассматриваем в данном примере
             value = Float.NaN;
         } else {
-            // Нормализованное число: значение = (-1)^sign * (1 + fraction) * 2^(exp - 127)
-            value = (1.0f + fraction) * (float)Math.pow(2, exp - 127);
+            value = (1.0f + fraction) * (float) Math.pow(2, exp - 127);
         }
         return result.append(sign ? -value : value).toString();
     }
 
     public static boolean[] floatToIEEE754(float f) {
-        boolean[] bits = new boolean[32];
-        // Обработка нуля (±0)
+        boolean[] bits = new boolean[NUMBER_SIZE];
+
         if (f == 0.0f) {
-            // Все биты остаются false
             return bits;
         }
-        // 1. Определяем знак
+
         boolean sign = (f < 0);
         bits[0] = sign;
-        float v = Math.abs(f);
+        float value = Math.abs(f);
 
-        // 2. Нормализация: найдем E, чтобы 1 <= v < 2.
-        int E = 0;
-        while (v >= 2.0f) {
-            v /= 2.0f;
-            E++;
+        int exponent = 0;
+        while (value >= 2.0f) {
+            value /= 2.0f;
+            exponent++;
         }
-        while (v < 1.0f) {
-            v *= 2.0f;
-            E--;
+        while (value < 1.0f) {
+            value *= 2.0f;
+            exponent--;
         }
-        float fPart = v - 1.0f;
-        int fractionInt = (int) (fPart * (1 << 23));
-        int exponentField = E + 127;
 
-        for (int i = 0; i < 8; i++) {
-            bits[i + 1] = ((exponentField >>> (7 - i)) & 1) == 1;
+        float fraction = value - 1.0f;
+
+        int fractionInt = (int) (fraction * (1 << FRACTION_SIZE));
+
+        int exponentField = exponent + EXPONENT_BIAS;
+
+        for (int i = 0; i < EXPONENT_SIZE; i++) {
+            bits[i + 1] = ((exponentField >>> (EXPONENT_SIZE - 1 - i)) & 1) == 1;
         }
-        for (int i = 0; i < 23; i++) {
-            bits[i + 9] = ((fractionInt >>> (22 - i)) & 1) == 1;
+
+        for (int i = 0; i < FRACTION_SIZE; i++) {
+            bits[i + 1 + EXPONENT_SIZE] = ((fractionInt >>> (FRACTION_SIZE - 1 - i)) & 1) == 1;
         }
+
         return bits;
     }
 
     public static String convertDivisionToString(FloatBinary result) {
         StringBuilder sb = new StringBuilder();
 
-        // Знак
         sb.append(result.integerPart[0] ? "1" : "0");
         sb.append("  ");
 
-        // Целая часть (26 бит)
         for (int i = 1; i < 27; i++) {
             sb.append(result.integerPart[i] ? "1" : "0");
         }
 
-        // Точка
         sb.append(".");
 
-        // Дробная часть (5 бит)
         for (boolean b : result.fractionalPart) {
             sb.append(b ? "1" : "0");
         }
