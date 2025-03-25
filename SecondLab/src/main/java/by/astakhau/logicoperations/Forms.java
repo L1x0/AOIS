@@ -30,22 +30,7 @@ public class Forms {
 
         for (int i = 1; i < table.size(); i++) {
             if (table.get(i).get(table.get(i).size() - 1).equals("1")) {
-                sb.append(sb.isEmpty() ? "(" : "| (");
-
-                for (int j = 0; j < varCount; j++) {
-                    if (table.get(i).get(j).equals("1")) {
-                        sb.append(table.get(0).get(j));
-                    } else {
-                        sb.append("!").append(table.get(0).get(j));
-                    }
-
-                    sb.append(" ");
-
-                    if (j + 1 < varCount) {
-                        sb.append("& ");
-                    }
-                }
-                sb.append(") ");
+                appendClause(sb, i, "1", "&", "|");
             }
         }
 
@@ -57,27 +42,37 @@ public class Forms {
 
         for (int i = 1; i < table.size(); i++) {
             if (table.get(i).get(table.get(i).size() - 1).equals("0")) {
-                sb.append(sb.isEmpty() ? "(" : "& (");
-
-                for (int j = 0; j < varCount; j++) {
-                    if (table.get(i).get(j).equals("0")) {
-                        sb.append(table.get(0).get(j));
-                    } else {
-                        sb.append("!").append(table.get(0).get(j));
-                    }
-
-                    sb.append(" ");
-
-                    if (j + 1 < varCount) {
-                        sb.append("| ");
-                    }
-                }
-                sb.append(") ");
+                appendClause(sb, i, "0", "|", "&");
             }
         }
 
         return sb.toString();
     }
+
+    private void appendClause(
+            StringBuilder sb,
+            int rowIndex,
+            String expectedValue,
+            String innerOperator,
+            String outerOperator
+    ) {
+        sb.append(sb.isEmpty() ? "(" : outerOperator + " (");
+
+        for (int j = 0; j < varCount; j++) {
+            if (table.get(rowIndex).get(j).equals(expectedValue)) {
+                sb.append(table.get(0).get(j));
+            } else {
+                sb.append("!").append(table.get(0).get(j));
+            }
+
+            sb.append(" ");
+            if (j + 1 < varCount) {
+                sb.append(innerOperator).append(" ");
+            }
+        }
+        sb.append(") ");
+    }
+
 
     private String createNumericPCNF() {
         StringBuilder sb = new StringBuilder();

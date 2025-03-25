@@ -7,19 +7,16 @@ import java.util.Map;
 
 public class TrueTable {
     String exp;
-
     List<String> prefixExp;
     List<String> variables;
     List<ArrayList<String>> table;
 
     Map<Integer, String> operationIndex = new HashMap<>();
     Map<Integer, Boolean> employedIndexes = new HashMap<>();
-
     Map<Integer, String> operationResultByIndex = new HashMap<>();
 
     TrueTable(String exp) {
         this.exp = exp;
-
         prefixExp = LogicalExpressionParser.infixToRPN(exp);
         variables = LogicalExpressionParser.getVariables(exp);
         table = createTable();
@@ -31,7 +28,6 @@ public class TrueTable {
 
     private ArrayList<ArrayList<String>> createTable() {
         ArrayList<ArrayList<String>> result = new ArrayList<>();
-
         result.add(new ArrayList<>());
         result.get(0).addAll(variables);
 
@@ -39,160 +35,133 @@ public class TrueTable {
             if (!LogicalExpressionParser.isVariable(prefixExp.get(i))
                     && !prefixExp.get(i).equals("!")
                     && !prefixExp.get(i).equals(">")) {
-
                 if (!prefixExp.get(i - 1).equals("!") && !prefixExp.get(i - 2).equals("!")) {
-                    result = onlyBinary(i, result);
+                    result = processBinaryOperator(i, result);
                 } else {
-                    result = withNOT(i, result);
+                    result = processOperatorWithNOT(i, result);
                 }
-
-            } else if (prefixExp.get(i).equals("!")) {
-
-                StringBuilder subExp = new StringBuilder();
-
-                subExp.append(prefixExp.get(i));
-
-                if (operationIndex.containsKey(i - 1)) {
-                    subExp.append("(").append(operationIndex.get(i - 1)).append(") ");
-                } else {
-                    subExp.append(prefixExp.get(i - 1));
-                }
-
-                result.get(0).add(subExp.toString());
-                operationIndex.put(i, subExp.toString());
-
-                employedIndexes.put(i - 1, true);
-                if (variables.contains(prefixExp.get(i - 1))) {
-                    employedIndexes.put(i, true);
-                }
+            }
+            else if (prefixExp.get(i).equals("!")) {
+                processNegation(i, result);
             }
         }
 
-
-
-        result = fillingTable(result);
-        result = solveAllExpression(result);
-
+        result = fillTable(result);
+        result = evaluateAllExpressions(result);
         return result;
     }
 
-    private ArrayList<ArrayList<String>> onlyBinary(int i, ArrayList<ArrayList<String>> result) {
-
+    private void processNegation(int i, ArrayList<ArrayList<String>> result) {
         StringBuilder subExp = new StringBuilder();
-        int j;
-        for (j = 2; employedIndexes.containsKey(i - j); j++) {}
-
-        if (operationIndex.containsKey(i - j)) {
-            subExp.append("(").append(operationIndex.get(i - j)).append(") ");
+        subExp.append(prefixExp.get(i));
+        if (operationIndex.containsKey(i - 1)) {
+            subExp.append("(").append(operationIndex.get(i - 1)).append(") ");
         } else {
-            subExp.append(prefixExp.get(i - j)).append(" ");
-
-            employedIndexes.put(i - j, true);
+            subExp.append(prefixExp.get(i - 1));
         }
+        result.get(0).add(subExp.toString());
+        operationIndex.put(i, subExp.toString());
+        employedIndexes.put(i - 1, true);
+        if (variables.contains(prefixExp.get(i - 1))) {
+            employedIndexes.put(i, true);
+        }
+    }
 
+    private ArrayList<ArrayList<String>> processBinaryOperator(int i, ArrayList<ArrayList<String>> result) {
+        StringBuilder subExp = new StringBuilder();
+
+        subExp.append(getOperandRepresentation(i, 2));
         subExp.append(prefixExp.get(i));
         if (prefixExp.get(i).equals("-")) {
             employedIndexes.put(i + 1, true);
             subExp.append(">");
         }
         subExp.append(" ");
-
-
-
-        if (operationIndex.containsKey(i - 1)) {
-            subExp.append("(").append(operationIndex.get(i - 1)).append(") ");
-        } else {
-            for (j = 1; employedIndexes.containsKey(i - j); j++) {}
-
-            subExp.append(prefixExp.get(i - j));
-            employedIndexes.put(i - j, true);
-        }
-
+        subExp.append(getOperandRepresentation(i, 1));
         result.get(0).add(subExp.toString());
-
         if (prefixExp.get(i).equals("-")) {
             operationIndex.put(i + 1, subExp.toString());
         } else {
             operationIndex.put(i, subExp.toString());
         }
-
         return result;
     }
 
-    private ArrayList<ArrayList<String>> withNOT(int i, ArrayList<ArrayList<String>> result) {
-
+    private ArrayList<ArrayList<String>> processOperatorWithNOT(int i, ArrayList<ArrayList<String>> result) {
         StringBuilder subExp = new StringBuilder();
+        boolean isNotSecond = prefixExp.get(i - 1).equals("!");
 
-        boolean isItAtSecond = prefixExp.get(i - 1).equals("!");
-
-        if (!isItAtSecond) {
-            if (operationIndex.containsKey(i - 2)) {
-                if (prefixExp.get(i - 2).equals("!")) {
-                    subExp.append(operationIndex.get(i - 2)).append(" ");
-                } else {
-                    subExp.append(" ").append(operationIndex.get(i - 2)).append(" ");
-                }
-            } else {
-                int j;
-                for (j = 2; employedIndexes.containsKey(i - j); j++) {}
-                subExp.append(prefixExp.get(i - j)).append(" ");
-
-                employedIndexes.put(i - j, true);
-            }
-
+        if (!isNotSecond) {
+            subExp.append(getLeftOperandForNot(i, 2));
         } else {
-            if (operationIndex.containsKey(i - 3)) {
-                if (prefixExp.get(i).equals("!")) {
-                    subExp.append(operationIndex.get(i - 3)).append(" ");
-                } else {
-                    subExp.append("(").append(operationIndex.get(i - 3)).append(") ");
-                }
-            } else {
-                int j;
-                for (j = 3; employedIndexes.containsKey(i - j); j++) {}
-                subExp.append(prefixExp.get(i - j)).append(" ");
-                employedIndexes.put(i - j, true);
-            }
-
+            subExp.append(getLeftOperandForNot(i, 3));
         }
         subExp.append(prefixExp.get(i));
-        if (prefixExp.get(i).equals("-")) subExp.append(">");
-        subExp.append(" ");
-
-
-
-        if (operationIndex.containsKey(i - 1)) {
-            if (prefixExp.get(i - 1).equals("!")) {
-                subExp.append(operationIndex.get(i - 1)).append(" ");
-            } else {
-                subExp.append("(").append(operationIndex.get(i - 1)).append(") ");
-            }
-        } else {
-            int j;
-            for (j = 1; employedIndexes.containsKey(i - j); j++) {}
-
-            subExp.append(prefixExp.get(i - j));
-            employedIndexes.put(i - j, true);
+        if (prefixExp.get(i).equals("-")) {
+            subExp.append(">");
         }
-
-
+        subExp.append(" ");
+        subExp.append(getRightOperandForNot(i));
         result.get(0).add(subExp.toString());
-
         if (prefixExp.get(i).equals("-")) {
             operationIndex.put(i + 1, subExp.toString());
             employedIndexes.put(i + 1, true);
         } else {
             operationIndex.put(i, subExp.toString());
         }
-
-
         return result;
+    }
+
+    private String getLeftOperandForNot(int i, int startOffset) {
+        int j;
+        for (j = startOffset; employedIndexes.containsKey(i - j); j++) {}
+        String operand;
+        if (operationIndex.containsKey(i - j)) {
+            if (prefixExp.get(i - j).equals("!")) {
+                operand = operationIndex.get(i - j) + " ";
+            } else {
+                operand = "(" + operationIndex.get(i - j) + ") ";
+            }
+        } else {
+            operand = prefixExp.get(i - j) + " ";
+            employedIndexes.put(i - j, true);
+        }
+        return operand;
+    }
+
+    private String getOperandRepresentation(int i, int startOffset) {
+        int j;
+        for (j = startOffset; employedIndexes.containsKey(i - j); j++) {}
+        String operand;
+        if (operationIndex.containsKey(i - j)) {
+            operand = "(" + operationIndex.get(i - j) + ") ";
+        } else {
+            operand = prefixExp.get(i - j) + " ";
+            employedIndexes.put(i - j, true);
+        }
+        return operand;
+    }
+
+    private String getRightOperandForNot(int i) {
+        String operand;
+        if (operationIndex.containsKey(i - 1)) {
+            if (prefixExp.get(i - 1).equals("!")) {
+                operand = operationIndex.get(i - 1) + " ";
+            } else {
+                operand = "(" + operationIndex.get(i - 1) + ") ";
+            }
+        } else {
+            int j;
+            for (j = 1; employedIndexes.containsKey(i - j); j++) {}
+            operand = prefixExp.get(i - j);
+            employedIndexes.put(i - j, true);
+        }
+        return operand;
     }
 
     private boolean solveSubexpression(String firstValStr, String secondValStr, String operation) {
         boolean firstVal = firstValStr.equals("1");
         boolean secondVal = secondValStr.equals("1");
-
         return switch (operation) {
             case "&" -> firstVal && secondVal;
             case "|" -> firstVal || secondVal;
@@ -204,105 +173,68 @@ public class TrueTable {
         };
     }
 
-    private ArrayList<ArrayList<String>> solveAllExpression(ArrayList<ArrayList<String>> table) {
-        ArrayList<ArrayList<String>> result = table;
-
-        for (int i = 1; i < result.size(); i++) {
+    private ArrayList<ArrayList<String>> evaluateAllExpressions(ArrayList<ArrayList<String>> table) {
+        for (int i = 1; i < table.size(); i++) {
             ArrayList<String> tempPrefix = new ArrayList<>(prefixExp);
-
             for (int j = 0; j < variables.size(); j++) {
-
                 int finalJ = j;
                 int finalI = i;
-
-                tempPrefix.replaceAll(s -> s.equals(result.get(0).get(finalJ)) ? result.get(finalI).get(finalJ) : s);
+                tempPrefix.replaceAll(s -> s.equals(table.get(0).get(finalJ))
+                        ? table.get(finalI).get(finalJ) : s);
             }
-
-            result.get(i).addAll(solveOnePrefix(tempPrefix));
+            table.get(i).addAll(evaluatePrefix(tempPrefix));
         }
-
-
-        return result;
+        return table;
     }
 
-    private ArrayList<String> solveOnePrefix(List<String> prefix) {
+    private ArrayList<String> evaluatePrefix(List<String> prefix) {
         ArrayList<String> result = new ArrayList<>();
         employedIndexes = new HashMap<>();
-
         for (int i = 0; i < prefix.size(); i++) {
-            String first, second;
             if (LogicalExpressionParser.isOperator(prefix.get(i)) && !prefix.get(i).equals("!")) {
-                int j;
-                for (j = 1; employedIndexes.containsKey(i - j); j++) {}
-
-                if (operationResultByIndex.containsKey(i - j)) {
-                    second = operationResultByIndex.get(i - j);
-
-                    employedIndexes.put(i - j, true);
-                } else {
-                    second = prefix.get(i - j);
-
-                    employedIndexes.put(i - j, true);
-                }
-
-                for (j = 2; employedIndexes.containsKey(i - j); j++) {}
-
-                if (operationResultByIndex.containsKey(i - j)) {
-                    first = operationResultByIndex.get(i - j);
-
-                    employedIndexes.put(i - j, true);
-                } else {
-                    first = prefix.get(i - j);
-
-                    employedIndexes.put(i - j, true);
-                }
-
-                result.add(solveSubexpression(first, second, prefix.get(i)) ? "1" : "0");
+                String second = getEvaluationOperand(prefix, i, 1);
+                String first = getEvaluationOperand(prefix, i, 2);
+                String opResult = solveSubexpression(first, second, prefix.get(i)) ? "1" : "0";
+                result.add(opResult);
                 if (prefix.get(i).equals("-")) {
                     employedIndexes.put(i, true);
-                    operationResultByIndex.put(i + 1, solveSubexpression(first, second, prefix.get(i)) ? "1" : "0");
+                    operationResultByIndex.put(i + 1, opResult);
                 } else {
-                    operationResultByIndex.put(i, solveSubexpression(first, second, prefix.get(i)) ? "1" : "0");
+                    operationResultByIndex.put(i, opResult);
                 }
-
-            } if (prefix.get(i).equals("!")) {
-                int j;
-                for (j = 1; employedIndexes.containsKey(i - j); j++) {}
-
-                if (operationResultByIndex.containsKey(i - j)) {
-                    second = operationResultByIndex.get(i - j);
-
-                    employedIndexes.put(i - j, true);
-                } else {
-                    second = prefix.get(i - j);
-
-                    employedIndexes.put(i - j, true);
-                }
-
-                result.add(solveSubexpression(second, second, prefix.get(i)) ? "1" : "0");
-                operationResultByIndex.put(i, solveSubexpression(second, second, prefix.get(i)) ? "1" : "0");
+            } else if (prefix.get(i).equals("!")) {
+                String operand = getEvaluationOperand(prefix, i, 1);
+                String opResult = solveSubexpression(operand, operand, prefix.get(i)) ? "1" : "0";
+                result.add(opResult);
+                operationResultByIndex.put(i, opResult);
             }
         }
-
         return result;
     }
 
-    private ArrayList<ArrayList<String>> fillingTable(ArrayList<ArrayList<String>> table) {
+    private String getEvaluationOperand(List<String> prefix, int i, int startOffset) {
+        int j;
+        for (j = startOffset; employedIndexes.containsKey(i - j); j++) {
+            // ищем первый неиспользованный индекс
+        }
+        String operand;
+        if (operationResultByIndex.containsKey(i - j)) {
+            operand = operationResultByIndex.get(i - j);
+        } else {
+            operand = prefix.get(i - j);
+        }
+        employedIndexes.put(i - j, true);
+        return operand;
+    }
+
+    private ArrayList<ArrayList<String>> fillTable(ArrayList<ArrayList<String>> table) {
         if (table == null || table.isEmpty()) {
             throw new IllegalArgumentException("Таблица должна содержать хотя бы одну строку с именами переменных.");
         }
-
-        ArrayList<String> header = table.get(0);
-        int numVars = LogicalExpressionParser.getVariables(exp).size(); // Количество переменных
-
-        // Вычисляем число строк для комбинаций: 2^numVars
+        int numVars = LogicalExpressionParser.getVariables(exp).size();
         int totalRows = (int) Math.pow(2, numVars);
-
-        // Для каждой комбинации от 0 до 2^n - 1
         for (int i = 0; i < totalRows; i++) {
             ArrayList<String> row = new ArrayList<>();
-            // Заполняем строку значениями переменных.
-            // Самый левый столбец соответствует старшему биту
             for (int j = 0; j < numVars; j++) {
                 int bit = (i >> (numVars - j - 1)) & 1;
                 row.add(bit == 1 ? "1" : "0");
@@ -325,7 +257,6 @@ public class TrueTable {
         StringBuilder sb = new StringBuilder();
         for (List<String> row : table) {
             for (String cell : row) {
-                // Каждая ячейка имеет фиксированную ширину 30 символов, выравнивание по левому краю
                 sb.append(String.format("%-20s", cell));
             }
             sb.append("\n");
