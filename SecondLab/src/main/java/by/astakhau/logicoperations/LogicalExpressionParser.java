@@ -25,10 +25,7 @@ public class LogicalExpressionParser {
 
 
     private static boolean isLeftAssociative(String op) {
-        if (op.equals("->") || op.equals("!")) {
-            return false;
-        }
-        return true;
+        return !op.equals("->") && !op.equals("!");
     }
 
     private static List<String> tokenize(String expression) {
@@ -64,7 +61,7 @@ public class LogicalExpressionParser {
 
     public static List<String> infixToRPN(String expression) {
         List<String> output = new ArrayList<>();
-        Stack<String> stack = new Stack<>();
+        Deque<String> stack = new ArrayDeque<>();
         List<String> tokens = tokenize(expression);
 
         for (String token : tokens) {
