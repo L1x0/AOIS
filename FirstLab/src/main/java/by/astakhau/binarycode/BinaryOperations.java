@@ -1,9 +1,26 @@
 package by.astakhau.binarycode;
 
 public class BinaryOperations {
+    // Константы для размеров массивов
+    private static final int BIT_LENGTH = 32;
+    private static final int BIT_LENGTH_WITHOUT_SIGN = 31;
+    
+    // Константы для деления
+    private static final int DEFAULT_PRECISION = 5;
+    private static final int SHIFT_INDEX = 4;
+    
+    // Константы для IEEE 754
+    private static final int IEEE_BIAS = 127;
+    private static final int IEEE_EXPONENT_BITS = 8;
+    private static final int IEEE_MANTISSA_BITS = 23;
+    private static final int IEEE_MANTISSA_START_INDEX = 9;
+    private static final int IEEE_MANTISSA_OVERFLOW = 1 << 24;
+    private static final int IEEE_MANTISSA_MASK = (1 << IEEE_MANTISSA_BITS) - 1;
+    private static final int IEEE_MANTISSA_IMPLICIT_BIT = 1 << IEEE_MANTISSA_BITS;
+    private static final int IEEE_MANTISSA_LAST_BIT_INDEX = 22;
 
     public static BinaryNumber.FloatBinary divide(int dividendNum, int divisorNum) {
-        int precision = 5;
+        int precision = DEFAULT_PRECISION;
 
         if (divisorNum == 0) {
             throw new ArithmeticException("Division by zero");
@@ -19,18 +36,18 @@ public class BinaryOperations {
         boolean[] divdMag = extractMagnitude(dividend);
         boolean[] divisMag = extractMagnitude(divisor);
 
-        boolean[] extendedDivisor = new boolean[32];
+        boolean[] extendedDivisor = new boolean[BIT_LENGTH];
         extendedDivisor[0] = false;
-        for (int i = 0; i < 31; i++) {
+        for (int i = 0; i < BIT_LENGTH_WITHOUT_SIGN; i++) {
             extendedDivisor[i + 1] = divisMag[i];
         }
 
-        boolean[] remainder = new boolean[32];
-        boolean[] quotient = new boolean[31];
+        boolean[] remainder = new boolean[BIT_LENGTH];
+        boolean[] quotient = new boolean[BIT_LENGTH_WITHOUT_SIGN];
 
-        for (int i = 0; i < 31; i++) {
+        for (int i = 0; i < BIT_LENGTH_WITHOUT_SIGN; i++) {
             remainder = leftShiftOneBit(remainder);
-            remainder[31] = divdMag[i];
+            remainder[BIT_LENGTH - 1] = divdMag[i];
 
             if (compare(remainder, extendedDivisor) >= 0) {
                 remainder = subtract(remainder, extendedDivisor);
@@ -51,13 +68,12 @@ public class BinaryOperations {
             }
         }
 
-        boolean[] resultInteger = new boolean[32];
+        boolean[] resultInteger = new boolean[BIT_LENGTH];
         resultInteger[0] = resultSign;
 
-        for (int i = 30; i > 4; i--) {
-            resultInteger[i - 4] = quotient[i];
+        for (int i = BIT_LENGTH_WITHOUT_SIGN - 1; i > SHIFT_INDEX; i--) {
+            resultInteger[i - SHIFT_INDEX] = quotient[i];
         }
-
 
         return new BinaryNumber.FloatBinary(resultInteger, fraction);
     }
@@ -125,13 +141,13 @@ public class BinaryOperations {
         boolean[] a = BinaryNumber.floatToIEEE754(aNum);
         boolean[] b = BinaryNumber.floatToIEEE754(bNum);
 
-        int expA = bitsToInt(a, 1, 8);
-        int expB = bitsToInt(b, 1, 8);
-        int E1 = expA - 127; // действительный порядок
-        int E2 = expB - 127;
+        int expA = bitsToInt(a, 1, IEEE_EXPONENT_BITS);
+        int expB = bitsToInt(b, 1, IEEE_EXPONENT_BITS);
+        int E1 = expA - IEEE_BIAS; // действительный порядок
+        int E2 = expB - IEEE_BIAS;
 
-        int fracA = (1 << 23) | bitsToInt(a, 9, 23);
-        int fracB = (1 << 23) | bitsToInt(b, 9, 23);
+        int fracA = IEEE_MANTISSA_IMPLICIT_BIT | bitsToInt(a, IEEE_MANTISSA_START_INDEX, IEEE_MANTISSA_BITS);
+        int fracB = IEEE_MANTISSA_IMPLICIT_BIT | bitsToInt(b, IEEE_MANTISSA_START_INDEX, IEEE_MANTISSA_BITS);
 
         int commonExp = Math.max(E1, E2);
         if (E1 < commonExp) {
@@ -143,21 +159,21 @@ public class BinaryOperations {
 
         int sumMantissa = fracA + fracB;
 
-        if (sumMantissa >= (1 << 24)) {
+        if (sumMantissa >= IEEE_MANTISSA_OVERFLOW) {
             sumMantissa = sumMantissa >> 1;
             commonExp++;
         }
 
-        int resultExp = commonExp + 127;
-        int resultFraction = sumMantissa & ((1 << 23) - 1);
+        int resultExp = commonExp + IEEE_BIAS;
+        int resultFraction = sumMantissa & IEEE_MANTISSA_MASK;
 
-        boolean[] result = new boolean[32];
+        boolean[] result = new boolean[BIT_LENGTH];
         result[0] = false; // знак 0
-        for (int i = 0; i < 8; i++) {
-            result[i + 1] = ((resultExp >>> (7 - i)) & 1) == 1;
+        for (int i = 0; i < IEEE_EXPONENT_BITS; i++) {
+            result[i + 1] = ((resultExp >>> (IEEE_EXPONENT_BITS - 1 - i)) & 1) == 1;
         }
-        for (int i = 0; i < 23; i++) {
-            result[i + 9] = ((resultFraction >>> (22 - i)) & 1) == 1;
+        for (int i = 0; i < IEEE_MANTISSA_BITS; i++) {
+            result[i + IEEE_MANTISSA_START_INDEX] = ((resultFraction >>> (IEEE_MANTISSA_LAST_BIT_INDEX - i)) & 1) == 1;
         }
         return result;
     }
@@ -171,11 +187,10 @@ public class BinaryOperations {
     }
 
     public static boolean[] sum(boolean[] A, boolean[] B) {
-
-        boolean[] result = new boolean[32];
+        boolean[] result = new boolean[BIT_LENGTH];
         boolean carry = false;
 
-        for (int i = 31; i >= 0; i--) {
+        for (int i = BIT_LENGTH - 1; i >= 0; i--) {
             boolean sumBit = (A[i] ^ B[i]) ^ carry;
             result[i] = sumBit;
             carry = (A[i] && B[i]) || (A[i] && carry) || (B[i] && carry);
@@ -221,17 +236,17 @@ public class BinaryOperations {
 
         boolean[] productMag = multiplyMagnitudes(magA, magB);
 
-        boolean[] result = new boolean[32];
+        boolean[] result = new boolean[BIT_LENGTH];
         result[0] = resultSign;
-        for (int i = 0; i < 31; i++) {
+        for (int i = 0; i < BIT_LENGTH_WITHOUT_SIGN; i++) {
             result[i + 1] = productMag[i];
         }
         return result;
     }
 
     private static boolean[] extractMagnitude(boolean[] bits32) {
-        boolean[] mag = new boolean[31];
-        for (int i = 0; i < 31; i++) {
+        boolean[] mag = new boolean[BIT_LENGTH_WITHOUT_SIGN];
+        for (int i = 0; i < BIT_LENGTH_WITHOUT_SIGN; i++) {
             mag[i] = bits32[i + 1];
         }
         return mag;
