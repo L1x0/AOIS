@@ -1,4 +1,4 @@
-package by.astakhau.logicoperations;
+package by.astakhau.formminimize;
 
 import java.util.ArrayList;
 import java.util.HashMap;
