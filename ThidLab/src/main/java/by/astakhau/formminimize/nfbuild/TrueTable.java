@@ -1,4 +1,4 @@
-package by.astakhau.formminimize;
+package by.astakhau.formminimize.nfbuild;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,10 +15,10 @@ public class TrueTable {
     Map<Integer, Boolean> employedIndexes = new HashMap<>();
     Map<Integer, String> operationResultByIndex = new HashMap<>();
 
-    TrueTable(String exp) {
+    public TrueTable(String exp) {
         this.exp = exp;
-        prefixExp = LogicalExpressionParser.infixToRPN(exp);
-        variables = LogicalExpressionParser.getVariables(exp);
+        prefixExp = Forms.LogicalExpressionParser.infixToRPN(exp);
+        variables = Forms.LogicalExpressionParser.getVariables(exp);
         table = createTable();
     }
 
@@ -32,7 +32,7 @@ public class TrueTable {
         result.get(0).addAll(variables);
 
         for (int i = 0; i < prefixExp.size(); i++) {
-            if (!LogicalExpressionParser.isVariable(prefixExp.get(i))
+            if (!Forms.LogicalExpressionParser.isVariable(prefixExp.get(i))
                     && !prefixExp.get(i).equals("!")
                     && !prefixExp.get(i).equals(">")) {
                 if (!prefixExp.get(i - 1).equals("!") && !prefixExp.get(i - 2).equals("!")) {
@@ -191,7 +191,7 @@ public class TrueTable {
         ArrayList<String> result = new ArrayList<>();
         employedIndexes = new HashMap<>();
         for (int i = 0; i < prefix.size(); i++) {
-            if (LogicalExpressionParser.isOperator(prefix.get(i)) && !prefix.get(i).equals("!")) {
+            if (Forms.LogicalExpressionParser.isOperator(prefix.get(i)) && !prefix.get(i).equals("!")) {
                 String second = getEvaluationOperand(prefix, i, 1);
                 String first = getEvaluationOperand(prefix, i, 2);
                 String opResult = solveSubexpression(first, second, prefix.get(i)) ? "1" : "0";
@@ -231,7 +231,7 @@ public class TrueTable {
         if (table == null || table.isEmpty()) {
             throw new IllegalArgumentException("Таблица должна содержать хотя бы одну строку с именами переменных.");
         }
-        int numVars = LogicalExpressionParser.getVariables(exp).size();
+        int numVars = Forms.LogicalExpressionParser.getVariables(exp).size();
         int totalRows = (int) Math.pow(2, numVars);
         for (int i = 0; i < totalRows; i++) {
             ArrayList<String> row = new ArrayList<>();

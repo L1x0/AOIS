@@ -1,5 +1,8 @@
 package by.astakhau.formminimize;
 
+import by.astakhau.formminimize.nfbuild.Forms;
+import by.astakhau.formminimize.nfbuild.TrueTable;
+
 import java.util.Scanner;
 
 public class UI {
@@ -33,6 +36,12 @@ public class UI {
 
         System.out.println("\nРезультат стадии склеивания ДНФ:");
         System.out.print(new GluingDNF(forms.getPDNF()).minimize());
+
+        System.out.println("\nРезультат расчётно-табличного КНФ:");
+        System.out.print(new GluingCNFCalc(forms.getPCNF()).minimize());
+
+        System.out.println("\nРезультат расчётно-табличного ДНФ:");
+        System.out.print(new GluingDNFCalc(forms.getPDNF()).minimize());
 
         System.out.println();
     }
