@@ -31,6 +31,10 @@ public class UI {
 //        System.out.println("\nИндексная форма: ");
 //        System.out.print(forms.getIndexForm());
 
+        // () | (¬d) | (¬a & ¬b)
+        // c ∨ ¬d ∨ ¬e ∨ ¬a¬b
+        // (a | b) -> (c | !d) | !e
+
         System.out.println("\nРезультат стадии склеивания КНФ:");
         System.out.print(new GluingCNF(forms.getPCNF()).minimize());
 
@@ -42,6 +46,17 @@ public class UI {
 
         System.out.println("\nРезультат расчётно-табличного ДНФ:");
         System.out.print(new GluingDNFCalc(forms.getPDNF()).minimize());
+
+        System.out.println("\nРезультат метода Карно:");
+        KarnaughBuilder kb = new KarnaughBuilder(forms.getPDNF(), forms.getPCNF());
+
+        System.out.println("\nКарта Карно:");
+        kb.printKMap();
+        System.out.println("\nКНФ:");
+        System.out.print(kb.getCNF());
+
+        System.out.println("\nДНФ:");
+        System.out.print(kb.getDNF());
 
         System.out.println();
     }
