@@ -5,10 +5,10 @@ import java.util.*;
 public class Forms {
     private TrueTable tableObj;
     private final ArrayList<ArrayList<String>> table;
-    private final String PDNF;
-    private final String PCNF;
-    private final String numericPDNF;
-    private final String numericPCNF;
+//    private final String PDNF;
+//    private final String PCNF;
+//    private final String numericPDNF;
+//    private final String numericPCNF;
     //private final String indexForm;
     private final int varCount;
 
@@ -18,10 +18,10 @@ public class Forms {
         this.table = tableObj.getTable();
         varCount = tableObj.getVariables().size();
 
-        PDNF = createPDNF();
-        PCNF = createPCNF();
-        numericPCNF = createNumericPCNF();
-        numericPDNF = createNumericPDNF();
+//        PDNF = createPDNF();
+//        PCNF = createPCNF();
+//        numericPCNF = createNumericPCNF();
+//        numericPDNF = createNumericPDNF();
         //indexForm = createIndexForm();
     }
 
@@ -98,19 +98,19 @@ public class Forms {
     }
 
 
-    private String createNumericPCNF() {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("(");
-        for (int i = 1; i < table.size(); i++) {
-            if (table.get(i).get(table.get(i).size() - 1).equals("1")) {
-                sb.append(i - 1);
-                sb.append(i + 2 < table.size() ? ", " : ") &");
-            }
-        }
-
-        return sb.toString();
-    }
+//    private String createNumericPCNF() {
+//        StringBuilder sb = new StringBuilder();
+//
+//        sb.append("(");
+//        for (int i = 1; i < table.size(); i++) {
+//            if (table.get(i).get(table.get(i).size() - 1).equals("1")) {
+//                sb.append(i - 1);
+//                sb.append(i + 2 < table.size() ? ", " : ") &");
+//            }
+//        }
+//
+//        return sb.toString();
+//    }
 
     private String createNumericPDNF() {
         StringBuilder sb = new StringBuilder();
@@ -138,21 +138,21 @@ public class Forms {
     }
 
 
-    public String getPDNF() {
-        return PDNF;
-    }
+//    public String getPDNF() {
+//        return PDNF;
+//    }
+//
+//    public String getPCNF() {
+//        return PCNF;
+//    }
 
-    public String getPCNF() {
-        return PCNF;
-    }
-
-    public String getNumericPDNF() {
-        return numericPDNF;
-    }
-
-    public String getNumericPCNF() {
-        return numericPCNF;
-    }
+//    public String getNumericPDNF() {
+//        return numericPDNF;
+//    }
+//
+//    public String getNumericPCNF() {
+//        return numericPCNF;
+//    }
 
 //    public String getIndexForm() {
 //        return indexForm;
