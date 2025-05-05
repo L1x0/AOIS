@@ -186,15 +186,14 @@ public class KarnaughBuilder {
     public String getCNF() {
         Set<String> zeros = filterKeysByValue(false);
         List<Set<String>> blocks = generateBlocks(zeros);
-        return selectCover(blocks, zeros);
+        return reformat(selectCover(blocks, zeros));
     }
 
     public String getDNF() {
         Set<String> ones = filterKeysByValue(true);
         String min;
         List<Set<String>> blocks = generateBlocks(ones);
-        min = selectCoverDNF(blocks, ones);
-        return min;
+        return reformat(selectCoverDNF(blocks, ones));
     }
 
     private Set<String> filterKeysByValue(boolean value) {
@@ -292,5 +291,12 @@ public class KarnaughBuilder {
     private boolean retainAny(Set<String> uncovered, Set<String> block) {
         for (String cell : block) if (uncovered.contains(cell)) return true;
         return false;
+    }
+
+    private static String reformat(String s) {
+        if ('(' == s.charAt(0) && ')' == s.charAt(s.length() - 1)) {
+            s = s.substring(1, s.length() - 1);
+        }
+        return s;
     }
 }
