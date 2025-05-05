@@ -21,17 +21,7 @@ public class UI {
 
         System.out.println("\nСКНФ: ");
         System.out.print(forms.getPCNF());
-
-//        System.out.println("\nЧисловая форма СДНФ:");
-//        System.out.print(forms.getNumericPDNF());
-//
-//        System.out.println("\nЧисловая форма СКНФ:");
-//        System.out.print(forms.getNumericPCNF());
-//
-//        System.out.println("\nИндексная форма: ");
-//        System.out.print(forms.getIndexForm());
-
-        // () | (¬d) | (¬a & ¬b)
+        
         // c ∨ ¬d ∨ ¬e ∨ ¬a¬b
         // (a | b) -> (c | !d) | !e
 

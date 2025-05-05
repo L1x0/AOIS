@@ -215,7 +215,6 @@ public class TrueTable {
     private String getEvaluationOperand(List<String> prefix, int i, int startOffset) {
         int j;
         for (j = startOffset; employedIndexes.containsKey(i - j); j++) {
-            // ищем первый неиспользованный индекс
         }
         String operand;
         if (operationResultByIndex.containsKey(i - j)) {

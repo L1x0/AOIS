@@ -9,7 +9,6 @@ public class Forms {
     private final String PCNF;
     private final String numericPDNF;
     private final String numericPCNF;
-    //private final String indexForm;
     private final int varCount;
 
 
@@ -22,7 +21,6 @@ public class Forms {
         PCNF = createPCNF();
         numericPCNF = createNumericPCNF();
         numericPDNF = createNumericPDNF();
-        //indexForm = createIndexForm();
     }
 
     private String createPDNF() {
