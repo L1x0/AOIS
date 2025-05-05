@@ -44,8 +44,8 @@ public class NFTest {
 
         KarnaughBuilder kb = new KarnaughBuilder(forms.getPDNF(), forms.getPCNF());
 
-        assertEquals("((!c) & (a | b))", kb.getCNF());
-        assertEquals("((b & !c) | (a & !c))", kb.getDNF());
+        assertEquals("(!c) & (a | b)", kb.getCNF());
+        assertEquals("(b & !c) | (a & !c)", kb.getDNF());
 
         String exp1 = "(a | b) -> (c | !d) | !e";
         TrueTable table1 = new TrueTable(exp1);
@@ -53,8 +53,8 @@ public class NFTest {
 
         KarnaughBuilder kb1 = new KarnaughBuilder(forms1.getPDNF(), forms1.getPCNF());
 
-        assertEquals("((!a | c | !d | !e) & (!b | c | !d | !e))", kb1.getCNF());
-        assertEquals("((!e) | (!d) | (!a & !b) | (c))", kb1.getDNF());
+        assertEquals("(!a | c | !d | !e) & (!b | c | !d | !e)", kb1.getCNF());
+        assertEquals("(!e) | (!d) | (!a & !b) | (c)", kb1.getDNF());
     }
 
     @Test

@@ -21,7 +21,7 @@ public class UI {
 
         System.out.println("\nСКНФ: ");
         System.out.print(forms.getPCNF());
-        
+
         // c ∨ ¬d ∨ ¬e ∨ ¬a¬b
         // (a | b) -> (c | !d) | !e
 
