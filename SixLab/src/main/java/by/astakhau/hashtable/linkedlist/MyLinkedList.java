@@ -169,6 +169,15 @@ public class MyLinkedList<E> implements MyList<E> {
         };
     }
 
+    public boolean contains(E element) {
+        for (E e : this) {
+            if (e.equals(element)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

@@ -57,6 +57,10 @@ public class ListTest {
     @Test
     public void listAnalysisTest() {
         assertEquals(4, list.size());
+
+        list.remove(1);
+
+        assertEquals(3, list.size());
         assertFalse(list.isEmpty());
     }
 }
