@@ -84,6 +84,7 @@
     <wire from="(760,310)" to="(760,410)"/>
     <wire from="(1010,600)" to="(1270,600)"/>
     <wire from="(540,860)" to="(540,920)"/>
+    <wire from="(1220,270)" to="(1310,270)"/>
     <wire from="(1360,340)" to="(1390,340)"/>
     <wire from="(820,940)" to="(830,940)"/>
     <wire from="(1510,450)" to="(1510,620)"/>
@@ -429,6 +430,7 @@
     <wire from="(1960,1120)" to="(1990,1120)"/>
     <wire from="(2080,920)" to="(2110,920)"/>
     <wire from="(1350,860)" to="(1350,880)"/>
+    <wire from="(1240,300)" to="(1240,380)"/>
     <wire from="(750,340)" to="(800,340)"/>
     <wire from="(310,220)" to="(1780,220)"/>
     <wire from="(1230,410)" to="(1230,760)"/>
@@ -475,7 +477,6 @@
     <wire from="(1230,410)" to="(1310,410)"/>
     <wire from="(280,1140)" to="(310,1140)"/>
     <wire from="(2090,640)" to="(2090,760)"/>
-    <wire from="(1240,270)" to="(1310,270)"/>
     <wire from="(540,440)" to="(570,440)"/>
     <wire from="(1500,820)" to="(1500,880)"/>
     <wire from="(1220,860)" to="(1220,920)"/>
@@ -489,7 +490,6 @@
     <wire from="(820,900)" to="(830,900)"/>
     <wire from="(2080,310)" to="(2080,410)"/>
     <wire from="(880,960)" to="(890,960)"/>
-    <wire from="(1240,270)" to="(1240,380)"/>
     <wire from="(2080,860)" to="(2110,860)"/>
     <wire from="(2090,290)" to="(2090,380)"/>
     <wire from="(330,160)" to="(330,300)"/>
@@ -565,7 +565,6 @@
     <wire from="(520,760)" to="(600,760)"/>
     <wire from="(1640,360)" to="(1670,360)"/>
     <wire from="(1230,200)" to="(1230,310)"/>
-    <wire from="(1220,270)" to="(1240,270)"/>
     <wire from="(1940,340)" to="(1970,340)"/>
     <wire from="(520,260)" to="(520,330)"/>
     <wire from="(750,70)" to="(750,270)"/>
@@ -605,167 +604,167 @@
     <wire from="(650,960)" to="(660,960)"/>
     <wire from="(590,900)" to="(600,900)"/>
     <wire from="(1240,900)" to="(1260,900)"/>
-    <comp lib="1" loc="(410,350)" name="AND Gate"/>
-    <comp lib="1" loc="(1120,940)" name="AND Gate"/>
-    <comp lib="1" loc="(1350,880)" name="AND Gate"/>
-    <comp lib="1" loc="(590,900)" name="NOT Gate"/>
-    <comp lib="1" loc="(1060,840)" name="NOT Gate"/>
-    <comp lib="1" loc="(1900,870)" name="AND Gate"/>
-    <comp lib="1" loc="(1410,850)" name="OR Gate"/>
-    <comp lib="1" loc="(1960,840)" name="OR Gate"/>
-    <comp lib="1" loc="(410,420)" name="AND Gate"/>
-    <comp lib="1" loc="(1900,810)" name="AND Gate"/>
-    <comp lib="1" loc="(390,910)" name="NOT Gate"/>
-    <comp lib="1" loc="(1900,930)" name="AND Gate"/>
-    <comp lib="1" loc="(2260,360)" name="OR Gate"/>
-    <comp lib="0" loc="(2350,360)" name="Pin">
-      <a name="facing" val="west"/>
-      <a name="output" val="true"/>
+    <comp lib="1" loc="(1840,910)" name="NOT Gate"/>
+    <comp lib="1" loc="(850,360)" name="AND Gate"/>
+    <comp lib="1" loc="(620,350)" name="AND Gate"/>
+    <comp lib="1" loc="(1180,850)" name="OR Gate"/>
+    <comp lib="1" loc="(2200,920)" name="AND Gate"/>
+    <comp lib="0" loc="(310,1140)" name="Splitter">
+      <a name="fanout" val="8"/>
+      <a name="incoming" val="8"/>
     </comp>
     <comp lib="0" loc="(220,1090)" name="Probe">
       <a name="radix" val="10unsigned"/>
     </comp>
-    <comp lib="1" loc="(820,820)" name="NOT Gate"/>
-    <comp lib="1" loc="(650,780)" name="AND Gate"/>
-    <comp lib="1" loc="(620,350)" name="AND Gate"/>
+    <comp lib="1" loc="(2140,920)" name="NOT Gate"/>
+    <comp lib="0" loc="(240,240)" name="Pin">
+      <a name="width" val="8"/>
+      <a name="tristate" val="false"/>
+    </comp>
+    <comp lib="1" loc="(2020,360)" name="OR Gate"/>
+    <comp lib="1" loc="(710,870)" name="OR Gate"/>
+    <comp lib="1" loc="(1900,870)" name="AND Gate"/>
+    <comp lib="1" loc="(1120,820)" name="AND Gate"/>
+    <comp lib="1" loc="(930,360)" name="OR Gate"/>
+    <comp lib="1" loc="(880,840)" name="AND Gate"/>
+    <comp lib="1" loc="(650,960)" name="AND Gate"/>
     <comp lib="1" loc="(1640,290)" name="AND Gate"/>
-    <comp lib="1" loc="(1290,840)" name="NOT Gate"/>
-    <comp lib="1" loc="(1620,820)" name="AND Gate"/>
-    <comp lib="1" loc="(2260,830)" name="OR Gate"/>
-    <comp lib="1" loc="(2140,880)" name="NOT Gate"/>
     <comp lib="1" loc="(1680,850)" name="OR Gate"/>
-    <comp lib="1" loc="(1560,880)" name="NOT Gate"/>
-    <comp lib="1" loc="(1290,800)" name="NOT Gate"/>
-    <comp lib="1" loc="(590,860)" name="NOT Gate"/>
-    <comp lib="1" loc="(850,290)" name="AND Gate"/>
-    <comp lib="1" loc="(820,920)" name="NOT Gate"/>
-    <comp lib="1" loc="(590,820)" name="NOT Gate"/>
     <comp lib="1" loc="(940,870)" name="OR Gate"/>
-    <comp lib="1" loc="(390,850)" name="NOT Gate"/>
-    <comp lib="1" loc="(1060,880)" name="NOT Gate"/>
+    <comp lib="1" loc="(1360,360)" name="AND Gate"/>
+    <comp lib="1" loc="(650,900)" name="AND Gate"/>
+    <comp lib="1" loc="(490,350)" name="OR Gate"/>
+    <comp lib="1" loc="(850,290)" name="AND Gate"/>
+    <comp lib="1" loc="(1100,440)" name="AND Gate"/>
+    <comp lib="1" loc="(1060,940)" name="NOT Gate"/>
+    <comp lib="1" loc="(2200,860)" name="AND Gate"/>
+    <comp lib="1" loc="(620,280)" name="AND Gate"/>
+    <comp lib="1" loc="(590,860)" name="NOT Gate"/>
+    <comp lib="1" loc="(1840,930)" name="NOT Gate"/>
+    <comp lib="1" loc="(880,900)" name="AND Gate"/>
+    <comp lib="1" loc="(1440,360)" name="OR Gate"/>
+    <comp lib="1" loc="(1100,300)" name="AND Gate"/>
+    <comp lib="1" loc="(1290,800)" name="NOT Gate"/>
+    <comp lib="1" loc="(390,950)" name="NOT Gate"/>
+    <comp lib="1" loc="(390,890)" name="NOT Gate"/>
+    <comp lib="0" loc="(290,240)" name="Splitter">
+      <a name="fanout" val="8"/>
+      <a name="incoming" val="8"/>
+    </comp>
+    <comp lib="1" loc="(390,810)" name="NOT Gate"/>
+    <comp lib="1" loc="(1120,880)" name="AND Gate"/>
+    <comp lib="1" loc="(1360,430)" name="AND Gate"/>
+    <comp lib="1" loc="(590,820)" name="NOT Gate"/>
+    <comp lib="1" loc="(1940,290)" name="AND Gate"/>
+    <comp lib="1" loc="(1840,890)" name="NOT Gate"/>
     <comp lib="0" loc="(260,1140)" name="Pin">
       <a name="output" val="true"/>
       <a name="width" val="8"/>
       <a name="tristate" val="false"/>
       <a name="labelloc" val="east"/>
     </comp>
-    <comp lib="1" loc="(1940,290)" name="AND Gate"/>
-    <comp lib="1" loc="(1840,910)" name="NOT Gate"/>
-    <comp lib="1" loc="(450,950)" name="AND Gate"/>
-    <comp lib="1" loc="(2180,290)" name="AND Gate"/>
-    <comp lib="1" loc="(1060,920)" name="NOT Gate"/>
-    <comp lib="1" loc="(2140,820)" name="NOT Gate"/>
-    <comp lib="1" loc="(2140,860)" name="NOT Gate"/>
-    <comp lib="1" loc="(1180,850)" name="OR Gate"/>
-    <comp lib="1" loc="(450,770)" name="AND Gate"/>
-    <comp lib="1" loc="(1360,360)" name="AND Gate"/>
-    <comp lib="0" loc="(240,240)" name="Pin">
-      <a name="width" val="8"/>
-      <a name="tristate" val="false"/>
-    </comp>
-    <comp lib="1" loc="(1180,370)" name="OR Gate"/>
-    <comp lib="1" loc="(650,900)" name="AND Gate"/>
-    <comp lib="0" loc="(290,240)" name="Splitter">
-      <a name="fanout" val="8"/>
-      <a name="incoming" val="8"/>
-    </comp>
-    <comp lib="1" loc="(1290,900)" name="NOT Gate"/>
-    <comp lib="1" loc="(820,960)" name="NOT Gate"/>
-    <comp lib="1" loc="(410,280)" name="AND Gate"/>
-    <comp lib="1" loc="(1840,790)" name="NOT Gate"/>
-    <comp lib="1" loc="(2140,900)" name="NOT Gate"/>
-    <comp lib="1" loc="(1060,940)" name="NOT Gate"/>
     <comp lib="0" loc="(200,80)" name="Probe">
       <a name="radix" val="10unsigned"/>
     </comp>
-    <comp lib="1" loc="(620,420)" name="AND Gate"/>
-    <comp lib="1" loc="(1120,820)" name="AND Gate"/>
-    <comp lib="1" loc="(590,920)" name="NOT Gate"/>
-    <comp lib="1" loc="(1290,940)" name="NOT Gate"/>
-    <comp lib="1" loc="(1560,840)" name="NOT Gate"/>
-    <comp lib="1" loc="(490,350)" name="OR Gate"/>
-    <comp lib="1" loc="(2020,360)" name="OR Gate"/>
-    <comp lib="1" loc="(820,940)" name="NOT Gate"/>
-    <comp lib="1" loc="(2200,860)" name="AND Gate"/>
-    <comp lib="1" loc="(700,350)" name="OR Gate"/>
-    <comp lib="1" loc="(820,860)" name="NOT Gate"/>
-    <comp lib="1" loc="(1560,940)" name="NOT Gate"/>
-    <comp lib="1" loc="(650,960)" name="AND Gate"/>
-    <comp lib="1" loc="(1620,760)" name="AND Gate"/>
-    <comp lib="1" loc="(1350,820)" name="AND Gate"/>
+    <comp lib="1" loc="(1290,920)" name="NOT Gate"/>
+    <comp lib="1" loc="(1120,760)" name="AND Gate"/>
+    <comp lib="1" loc="(390,910)" name="NOT Gate"/>
+    <comp lib="1" loc="(1840,870)" name="NOT Gate"/>
+    <comp lib="1" loc="(650,780)" name="AND Gate"/>
+    <comp lib="1" loc="(1960,840)" name="OR Gate"/>
     <comp lib="1" loc="(1560,800)" name="NOT Gate"/>
-    <comp lib="1" loc="(1640,430)" name="AND Gate"/>
-    <comp lib="1" loc="(1350,760)" name="AND Gate"/>
-    <comp lib="1" loc="(880,840)" name="AND Gate"/>
-    <comp lib="1" loc="(390,810)" name="NOT Gate"/>
-    <comp lib="0" loc="(310,1140)" name="Splitter">
-      <a name="fanout" val="8"/>
-      <a name="incoming" val="8"/>
-    </comp>
-    <comp lib="1" loc="(2200,920)" name="AND Gate"/>
-    <comp lib="1" loc="(1640,360)" name="AND Gate"/>
-    <comp lib="1" loc="(850,430)" name="AND Gate"/>
-    <comp lib="1" loc="(1360,430)" name="AND Gate"/>
+    <comp lib="1" loc="(1350,880)" name="AND Gate"/>
+    <comp lib="1" loc="(1560,920)" name="NOT Gate"/>
+    <comp lib="1" loc="(450,950)" name="AND Gate"/>
     <comp lib="0" loc="(270,570)" name="Constant">
       <a name="value" val="0x0"/>
     </comp>
-    <comp lib="1" loc="(710,870)" name="OR Gate"/>
+    <comp lib="1" loc="(820,960)" name="NOT Gate"/>
+    <comp lib="1" loc="(1290,880)" name="NOT Gate"/>
+    <comp lib="1" loc="(1940,360)" name="AND Gate"/>
+    <comp lib="1" loc="(390,930)" name="NOT Gate"/>
     <comp lib="1" loc="(450,830)" name="AND Gate"/>
-    <comp lib="1" loc="(2180,360)" name="AND Gate"/>
-    <comp lib="1" loc="(1350,940)" name="AND Gate"/>
-    <comp lib="1" loc="(1440,360)" name="OR Gate"/>
-    <comp lib="1" loc="(650,840)" name="AND Gate"/>
-    <comp lib="1" loc="(2140,920)" name="NOT Gate"/>
-    <comp lib="1" loc="(1100,300)" name="AND Gate"/>
-    <comp lib="1" loc="(820,900)" name="NOT Gate"/>
-    <comp lib="1" loc="(1840,890)" name="NOT Gate"/>
-    <comp lib="1" loc="(620,280)" name="AND Gate"/>
-    <comp lib="1" loc="(1560,900)" name="NOT Gate"/>
-    <comp lib="1" loc="(1100,370)" name="AND Gate"/>
-    <comp lib="1" loc="(1840,930)" name="NOT Gate"/>
-    <comp lib="1" loc="(1840,870)" name="NOT Gate"/>
-    <comp lib="1" loc="(1120,880)" name="AND Gate"/>
-    <comp lib="1" loc="(2200,740)" name="AND Gate"/>
-    <comp lib="1" loc="(1100,440)" name="AND Gate"/>
-    <comp lib="1" loc="(1290,920)" name="NOT Gate"/>
-    <comp lib="1" loc="(1120,760)" name="AND Gate"/>
-    <comp lib="1" loc="(1360,290)" name="AND Gate"/>
-    <comp lib="1" loc="(880,900)" name="AND Gate"/>
-    <comp lib="1" loc="(1560,920)" name="NOT Gate"/>
-    <comp lib="1" loc="(590,940)" name="NOT Gate"/>
-    <comp lib="1" loc="(1900,750)" name="AND Gate"/>
-    <comp lib="1" loc="(510,860)" name="OR Gate"/>
-    <comp lib="1" loc="(390,950)" name="NOT Gate"/>
-    <comp lib="1" loc="(1060,800)" name="NOT Gate"/>
-    <comp lib="1" loc="(1620,940)" name="AND Gate"/>
-    <comp lib="1" loc="(2200,800)" name="AND Gate"/>
-    <comp lib="1" loc="(930,360)" name="OR Gate"/>
-    <comp lib="1" loc="(880,960)" name="AND Gate"/>
-    <comp lib="0" loc="(290,130)" name="Splitter">
-      <a name="fanout" val="8"/>
-      <a name="incoming" val="8"/>
+    <comp lib="1" loc="(450,770)" name="AND Gate"/>
+    <comp lib="1" loc="(1560,880)" name="NOT Gate"/>
+    <comp lib="1" loc="(2140,900)" name="NOT Gate"/>
+    <comp lib="0" loc="(200,190)" name="Probe">
+      <a name="radix" val="10unsigned"/>
     </comp>
     <comp lib="0" loc="(240,130)" name="Pin">
       <a name="width" val="8"/>
       <a name="tristate" val="false"/>
     </comp>
-    <comp lib="1" loc="(1620,880)" name="AND Gate"/>
+    <comp lib="1" loc="(1350,940)" name="AND Gate"/>
+    <comp lib="1" loc="(2180,360)" name="AND Gate"/>
+    <comp lib="1" loc="(590,920)" name="NOT Gate"/>
+    <comp lib="1" loc="(410,280)" name="AND Gate"/>
+    <comp lib="1" loc="(2140,880)" name="NOT Gate"/>
+    <comp lib="1" loc="(820,940)" name="NOT Gate"/>
     <comp lib="1" loc="(590,960)" name="NOT Gate"/>
-    <comp lib="1" loc="(1720,360)" name="OR Gate"/>
-    <comp lib="1" loc="(1940,430)" name="AND Gate"/>
-    <comp lib="1" loc="(880,780)" name="AND Gate"/>
-    <comp lib="1" loc="(390,930)" name="NOT Gate"/>
+    <comp lib="1" loc="(1060,920)" name="NOT Gate"/>
+    <comp lib="1" loc="(1060,840)" name="NOT Gate"/>
+    <comp lib="1" loc="(1900,930)" name="AND Gate"/>
+    <comp lib="1" loc="(1120,940)" name="AND Gate"/>
+    <comp lib="1" loc="(1640,430)" name="AND Gate"/>
+    <comp lib="1" loc="(1410,850)" name="OR Gate"/>
+    <comp lib="1" loc="(2140,820)" name="NOT Gate"/>
+    <comp lib="1" loc="(1560,840)" name="NOT Gate"/>
+    <comp lib="1" loc="(1840,790)" name="NOT Gate"/>
     <comp lib="1" loc="(2140,780)" name="NOT Gate"/>
-    <comp lib="1" loc="(2180,430)" name="AND Gate"/>
-    <comp lib="1" loc="(1290,880)" name="NOT Gate"/>
-    <comp lib="1" loc="(850,360)" name="AND Gate"/>
-    <comp lib="1" loc="(1840,830)" name="NOT Gate"/>
-    <comp lib="1" loc="(1940,360)" name="AND Gate"/>
-    <comp lib="1" loc="(450,890)" name="AND Gate"/>
-    <comp lib="0" loc="(200,190)" name="Probe">
-      <a name="radix" val="10unsigned"/>
+    <comp lib="1" loc="(820,820)" name="NOT Gate"/>
+    <comp lib="1" loc="(850,430)" name="AND Gate"/>
+    <comp lib="1" loc="(880,780)" name="AND Gate"/>
+    <comp lib="1" loc="(1060,880)" name="NOT Gate"/>
+    <comp lib="0" loc="(2350,360)" name="Pin">
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
     </comp>
+    <comp lib="1" loc="(1620,820)" name="AND Gate"/>
+    <comp lib="1" loc="(2260,360)" name="OR Gate"/>
+    <comp lib="1" loc="(1180,370)" name="OR Gate"/>
+    <comp lib="1" loc="(1560,940)" name="NOT Gate"/>
+    <comp lib="1" loc="(1350,820)" name="AND Gate"/>
+    <comp lib="1" loc="(1290,840)" name="NOT Gate"/>
+    <comp lib="1" loc="(1560,900)" name="NOT Gate"/>
+    <comp lib="1" loc="(590,940)" name="NOT Gate"/>
+    <comp lib="1" loc="(2200,740)" name="AND Gate"/>
+    <comp lib="0" loc="(290,130)" name="Splitter">
+      <a name="fanout" val="8"/>
+      <a name="incoming" val="8"/>
+    </comp>
+    <comp lib="1" loc="(1900,810)" name="AND Gate"/>
+    <comp lib="1" loc="(590,900)" name="NOT Gate"/>
+    <comp lib="1" loc="(700,350)" name="OR Gate"/>
+    <comp lib="1" loc="(650,840)" name="AND Gate"/>
+    <comp lib="1" loc="(820,860)" name="NOT Gate"/>
+    <comp lib="1" loc="(820,920)" name="NOT Gate"/>
+    <comp lib="1" loc="(2180,290)" name="AND Gate"/>
+    <comp lib="1" loc="(2260,830)" name="OR Gate"/>
     <comp lib="1" loc="(1060,900)" name="NOT Gate"/>
-    <comp lib="1" loc="(390,890)" name="NOT Gate"/>
+    <comp lib="1" loc="(1350,760)" name="AND Gate"/>
+    <comp lib="1" loc="(1640,360)" name="AND Gate"/>
+    <comp lib="1" loc="(1940,430)" name="AND Gate"/>
+    <comp lib="1" loc="(390,850)" name="NOT Gate"/>
+    <comp lib="1" loc="(1100,370)" name="AND Gate"/>
+    <comp lib="1" loc="(2140,860)" name="NOT Gate"/>
+    <comp lib="1" loc="(1360,290)" name="AND Gate"/>
+    <comp lib="1" loc="(620,420)" name="AND Gate"/>
+    <comp lib="1" loc="(1720,360)" name="OR Gate"/>
+    <comp lib="1" loc="(410,350)" name="AND Gate"/>
+    <comp lib="1" loc="(2180,430)" name="AND Gate"/>
+    <comp lib="1" loc="(510,860)" name="OR Gate"/>
+    <comp lib="1" loc="(1060,800)" name="NOT Gate"/>
+    <comp lib="1" loc="(1620,880)" name="AND Gate"/>
+    <comp lib="1" loc="(1290,900)" name="NOT Gate"/>
+    <comp lib="1" loc="(1290,940)" name="NOT Gate"/>
+    <comp lib="1" loc="(820,900)" name="NOT Gate"/>
+    <comp lib="1" loc="(1900,750)" name="AND Gate"/>
+    <comp lib="1" loc="(1620,760)" name="AND Gate"/>
+    <comp lib="1" loc="(2200,800)" name="AND Gate"/>
+    <comp lib="1" loc="(450,890)" name="AND Gate"/>
+    <comp lib="1" loc="(410,420)" name="AND Gate"/>
+    <comp lib="1" loc="(1620,940)" name="AND Gate"/>
+    <comp lib="1" loc="(1840,830)" name="NOT Gate"/>
+    <comp lib="1" loc="(880,960)" name="AND Gate"/>
   </circuit>
 </project>

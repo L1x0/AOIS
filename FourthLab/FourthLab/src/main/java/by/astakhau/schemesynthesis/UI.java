@@ -39,7 +39,9 @@ public class UI {
         System.out.print(reviewOfResult(new GluingCNF(converter.getThirdCNF()).minimize()));
 
         System.out.println("\nCКНФ четвёртой цифры: ");
-        System.out.print(reviewOfResult(converter.getFourthCNF()));
+        System.out.print(reviewOfResult(converter.getFourthCNF()).isEmpty()
+                ? "всегда 1"
+                : reviewOfResult(new GluingCNF(converter.getFourthCNF()).minimize()));
 
         System.out.println();
     }
