@@ -93,10 +93,11 @@ public class Table implements MyHashtable<String, String> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Содержание хэш-таблицы:\n");
 
         for (int i = 0; i < records.size(); i++) {
             sb.append(i);
-            sb.append(records.get(i).toString()).append("\n");
+            sb.append(records.get(i).toString());
         }
 
         return sb.toString();
