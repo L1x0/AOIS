@@ -19,7 +19,7 @@ public class UI {
             System.out.println("1) Вывести слово по его номеру");
             System.out.println("2) Перегенерировать матрицу");
             System.out.println("3) Ввести слово по его номеру");
-            System.out.println("1) Вывести слово по его номеру");
+            System.out.println("4) Провести логические выражение над словами");
             System.out.println("1) Вывести слово по его номеру");
 
             Scanner scanner = new Scanner(System.in);
@@ -41,9 +41,7 @@ public class UI {
                         break;
                     }
 
-                    for (Boolean bool : list) {
-                        System.out.print(bool ? "1 " : "0 ");
-                    }
+                    printList(list);
                     System.out.println("\n\n\n");
                     break;
 
@@ -73,9 +71,70 @@ public class UI {
                     }
 
                     break;
+                case 4:
+                    System.out.println("номер первого слова");
+                    index = scanner.nextInt();
+
+                    List<Boolean> firstOperand;
+
+
+                    try {
+                        firstOperand = matrix.getWord(index);
+                    } catch (IllegalStateException | IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                        break;
+                    }
+
+                    System.out.println("\nномер второго слова");
+                    index = scanner.nextInt();
+
+                    List<Boolean> secondOperand;
+
+                    try {
+                        secondOperand = matrix.getWord(index);
+                    } catch (IllegalStateException | IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                        break;
+                    }
+
+                    System.out.print("Первый операнд: ");
+                    printList(firstOperand);
+
+                    System.out.print("\nВторой операнд: ");
+                    printList(secondOperand);
+
+                    var logicExp = new LogicalOperation(firstOperand, secondOperand);
+
+                    System.out.print("\nf1: ");
+
+                    var temp = logicExp.firstExpression();
+                    printList(temp);
+
+                    System.out.print("\nf3: ");
+
+                    temp = logicExp.secondExpression();
+                    printList(temp);
+
+                    System.out.print("\nf12: ");
+
+                    temp = logicExp.thirdExpression();
+                    printList(temp);
+
+                    System.out.print("\nf14: ");
+
+                    temp = logicExp.fourthExpression();
+                    printList(temp);
+
+                    System.out.println("\n\n\n");
             }
         }
 
+    }
+
+    private static void printList(List<Boolean> temp) {
+        for (Boolean bool : temp) {
+            System.out.print(bool ? "1 " : "0 ");
+        }
     }
 
 }
