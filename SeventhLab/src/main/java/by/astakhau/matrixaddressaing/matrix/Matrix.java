@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Random;
 
 public class Matrix {
-    private static final int WORD_FULL_LENGTH = 17;
-    private static final int MATRIX_SIDE = 16;
+    public static final int WORD_FULL_LENGTH = 17;
+    public static final int MATRIX_SIDE = 16;
+    public static final int WORDS_COUNT = 15;
     List<List<Boolean>> matrix;
 
     public Matrix(List<List<Boolean>> matrix) {
@@ -27,7 +28,7 @@ public class Matrix {
         }
 
         if (num >= MATRIX_SIDE || num < 0) {
-            throw new IllegalArgumentException("число выходит за границы матрицы");
+            return null;
         }
 
         num--;
@@ -48,7 +49,7 @@ public class Matrix {
         }
 
         if (num >= MATRIX_SIDE || num < 0) {
-            throw new IllegalArgumentException("число выходит за границы матрицы");
+            return;
         }
 
         if (word.size() != MATRIX_SIDE) {

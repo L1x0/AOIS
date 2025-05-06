@@ -20,6 +20,7 @@ public class UI {
             System.out.println("2) Перегенерировать матрицу");
             System.out.println("3) Ввести слово по его номеру");
             System.out.println("4) Провести логические выражение над словами");
+            System.out.println("5) Сложение полей Aj и Bj  в словах Sj, у которых Vj совпадает с заданным V= 000-111");
             System.out.println("1) Вывести слово по его номеру");
 
             Scanner scanner = new Scanner(System.in);
@@ -126,6 +127,42 @@ public class UI {
                     printList(temp);
 
                     System.out.println("\n\n\n");
+                    break;
+
+                case 5:
+                    System.out.println();
+
+                    List<Boolean> V = new ArrayList<>();
+
+                    System.out.println("Введите первый бит (1 или 0)");
+                    V.add(0, scanner.nextInt() == 1);
+
+                    System.out.println("Введите второй бит (1 или 0)");
+                    V.add(1, scanner.nextInt() == 1);
+
+                    System.out.println("Введите третий бит (1 или 0)");
+                    V.add(2, scanner.nextInt() == 1);
+                    FieldAddition fieldAddition = new FieldAddition(V, matrix);
+
+                    var foundWords = fieldAddition.getFoundWords();
+
+                    System.out.println("Найденные слова:");
+
+                    for (List<Boolean> booleans : foundWords) {
+                        printList(booleans);
+                        System.out.print("\n");
+                    }
+                    System.out.println("_______________\n");
+
+                    var result = fieldAddition.getResult();
+
+                    for (List<Boolean> booleans : result) {
+                        printList(booleans);
+                        System.out.print("\n");
+                    }
+
+                    System.out.println("_________________\n\n\n");
+                    break;
             }
         }
 
