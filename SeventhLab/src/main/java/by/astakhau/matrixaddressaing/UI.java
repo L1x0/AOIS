@@ -21,7 +21,7 @@ public class UI {
             System.out.println("3) Ввести слово по его номеру");
             System.out.println("4) Провести логические выражение над словами");
             System.out.println("5) Сложение полей Aj и Bj  в словах Sj, у которых Vj совпадает с заданным V= 000-111");
-            System.out.println("1) Вывести слово по его номеру");
+            System.out.println("6) Поиск ближайших сверху/снизу");
 
             Scanner scanner = new Scanner(System.in);
             int choice = scanner.nextInt();
@@ -163,6 +163,20 @@ public class UI {
 
                     System.out.println("_________________\n\n\n");
                     break;
+
+                case 6:
+                    System.out.println();
+                    System.out.println("Введите номер слова: ");
+                    index = scanner.nextInt();
+                    NearestWordSearch nearestWordSearch = new NearestWordSearch(matrix, index);
+
+                    System.out.println("\nБлижайшее сверху: ");
+                    printList(nearestWordSearch.getNearestGreaterWord());
+
+                    System.out.println("\nБлижайшее снизу: ");
+                    printList(nearestWordSearch.getNearestLowerWord());
+
+                    System.out.println("\n\n\n");
             }
         }
 
