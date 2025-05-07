@@ -1,4 +1,4 @@
-package by.astakhau.matrixaddressaing.matrix;
+package by.astakhau.matrixaddressing.matrix;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,16 +10,14 @@ public class Matrix {
     public static final int WORDS_COUNT = 15;
     List<List<Boolean>> matrix;
 
-    public Matrix(List<List<Boolean>> matrix) {
-        this.matrix = matrix;
-    }
-
     public Matrix() {
         matrix = new ArrayList<>();
 
         for (int i = 0; i < 16; i++) {
             matrix.add(new ArrayList<>());
         }
+
+        this.generateMatrix();
     }
 
     public List<Boolean> getWord(int num) {

@@ -1,6 +1,6 @@
-package by.astakhau.matrixaddressaing;
+package by.astakhau.matrixaddressing.matrix.operations;
 
-import by.astakhau.matrixaddressaing.matrix.Matrix;
+import by.astakhau.matrixaddressing.matrix.Matrix;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package by.astakhau.matrixaddressaing;
+package by.astakhau.matrixaddressing.matrix.operations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ public class LogicalOperation {
         this.firstOperand = firstOperand;
         this.secondOperand = secondOperand;
     }
-    //1 3 14 12
+
     public List<Boolean> firstExpression() {
         List<Boolean> result = new ArrayList<>();
 

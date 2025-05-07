@@ -1,6 +1,9 @@
-package by.astakhau.matrixaddressaing;
+package by.astakhau.matrixaddressing;
 
-import by.astakhau.matrixaddressaing.matrix.Matrix;
+import by.astakhau.matrixaddressing.matrix.Matrix;
+import by.astakhau.matrixaddressing.matrix.operations.FieldAddition;
+import by.astakhau.matrixaddressing.matrix.operations.LogicalOperation;
+import by.astakhau.matrixaddressing.matrix.operations.NearestWordSearch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +15,6 @@ public class UI {
 
     public static void doProgram() {
         Matrix matrix = new Matrix();
-        matrix.generateMatrix();
 
         while (true) {
             System.out.println(matrix);
