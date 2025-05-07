@@ -22,11 +22,19 @@ public class NearestWordSearch {
     public List<Boolean> getNearestGreaterWord() {
         setTargetIndex();
 
+        if (targetIndex == words.size() - 1) {
+            return null;
+        }
+
         return words.get(targetIndex + 1);
     }
 
     public List<Boolean> getNearestLowerWord() {
         setTargetIndex();
+
+        if (targetIndex == 0) {
+            return null;
+        }
 
         return words.get(targetIndex - 1);
     }

@@ -7,185 +7,180 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UI {
+
+    private static final Scanner scanner = new Scanner(System.in);
+
     public static void doProgram() {
         Matrix matrix = new Matrix();
         matrix.generateMatrix();
 
         while (true) {
             System.out.println(matrix);
+            displayMenu();
 
-            System.out.println();
-            System.out.println("Выберите операцию:");
-            System.out.println("1) Вывести слово по его номеру");
-            System.out.println("2) Перегенерировать матрицу");
-            System.out.println("3) Ввести слово по его номеру");
-            System.out.println("4) Провести логические выражение над словами");
-            System.out.println("5) Сложение полей Aj и Bj  в словах Sj, у которых Vj совпадает с заданным V= 000-111");
-            System.out.println("6) Поиск ближайших сверху/снизу");
-
-            Scanner scanner = new Scanner(System.in);
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-            int index;
+            int choice = readInt("Выберите операцию: ");
 
             switch (choice) {
                 case 1:
-                    System.out.println("какое слово вывести");
-                    index = scanner.nextInt();
-
-                    List<Boolean> list;
-
-                    try {
-                        list = matrix.getWord(index);
-                    } catch (IllegalStateException | IllegalArgumentException e) {
-                        System.out.println(e.getMessage());
-                        break;
-                    }
-
-                    printList(list);
+                    displayWord(matrix);
                     System.out.println("\n\n\n");
                     break;
-
                 case 2:
                     matrix.generateMatrix();
+                    System.out.println("\n\n\n");
                     break;
-
                 case 3:
-                    System.out.println();
-                    System.out.println("Введите слово: ");
-                    var str = scanner.nextLine();
-
-                    List<Boolean> word = new ArrayList<>();
-
-                    for (char c : str.toCharArray()) {
-                        word.add(c == '1');
-                    }
-
-                    System.out.println("Введите его позицию");
-                    index = scanner.nextInt();
-
-                    try {
-                        matrix.setWord(index, word);
-                    } catch (IllegalStateException | IllegalArgumentException e) {
-                        System.out.println(e.getMessage());
-                        break;
-                    }
-
+                    inputWord(matrix);
+                    System.out.println("\n\n\n");
                     break;
                 case 4:
-                    System.out.println("номер первого слова");
-                    index = scanner.nextInt();
-
-                    List<Boolean> firstOperand;
-
-
-                    try {
-                        firstOperand = matrix.getWord(index);
-                    } catch (IllegalStateException | IllegalArgumentException e) {
-                        System.out.println(e.getMessage());
-                        break;
-                    }
-
-                    System.out.println("\nномер второго слова");
-                    index = scanner.nextInt();
-
-                    List<Boolean> secondOperand;
-
-                    try {
-                        secondOperand = matrix.getWord(index);
-                    } catch (IllegalStateException | IllegalArgumentException e) {
-                        System.out.println(e.getMessage());
-                        break;
-                    }
-
-                    System.out.print("Первый операнд: ");
-                    printList(firstOperand);
-
-                    System.out.print("\nВторой операнд: ");
-                    printList(secondOperand);
-
-                    var logicExp = new LogicalOperation(firstOperand, secondOperand);
-
-                    System.out.print("\nf1: ");
-
-                    var temp = logicExp.firstExpression();
-                    printList(temp);
-
-                    System.out.print("\nf3: ");
-
-                    temp = logicExp.secondExpression();
-                    printList(temp);
-
-                    System.out.print("\nf12: ");
-
-                    temp = logicExp.thirdExpression();
-                    printList(temp);
-
-                    System.out.print("\nf14: ");
-
-                    temp = logicExp.fourthExpression();
-                    printList(temp);
-
+                    performLogicalOperations(matrix);
                     System.out.println("\n\n\n");
                     break;
-
                 case 5:
-                    System.out.println();
-
-                    List<Boolean> V = new ArrayList<>();
-
-                    System.out.println("Введите первый бит (1 или 0)");
-                    V.add(0, scanner.nextInt() == 1);
-
-                    System.out.println("Введите второй бит (1 или 0)");
-                    V.add(1, scanner.nextInt() == 1);
-
-                    System.out.println("Введите третий бит (1 или 0)");
-                    V.add(2, scanner.nextInt() == 1);
-                    FieldAddition fieldAddition = new FieldAddition(V, matrix);
-
-                    var foundWords = fieldAddition.getFoundWords();
-
-                    System.out.println("Найденные слова:");
-
-                    for (List<Boolean> booleans : foundWords) {
-                        printList(booleans);
-                        System.out.print("\n");
-                    }
-                    System.out.println("_______________\n");
-
-                    var result = fieldAddition.getResult();
-
-                    for (List<Boolean> booleans : result) {
-                        printList(booleans);
-                        System.out.print("\n");
-                    }
-
-                    System.out.println("_________________\n\n\n");
-                    break;
-
-                case 6:
-                    System.out.println();
-                    System.out.println("Введите номер слова: ");
-                    index = scanner.nextInt();
-                    NearestWordSearch nearestWordSearch = new NearestWordSearch(matrix, index);
-
-                    System.out.println("\nБлижайшее сверху: ");
-                    printList(nearestWordSearch.getNearestGreaterWord());
-
-                    System.out.println("\nБлижайшее снизу: ");
-                    printList(nearestWordSearch.getNearestLowerWord());
-
+                    performFieldAddition(matrix);
                     System.out.println("\n\n\n");
+                    break;
+                case 6:
+                    findNearestWords(matrix);
+                    System.out.println("\n\n\n");
+                    break;
+                default:
+                    System.out.println("Неверный выбор. Пожалуйста, попробуйте снова.");
             }
         }
-
     }
 
-    private static void printList(List<Boolean> temp) {
-        for (Boolean bool : temp) {
-            System.out.print(bool ? "1 " : "0 ");
+    private static void displayMenu() {
+        System.out.println();
+        System.out.println("1) Вывести слово по его номеру");
+        System.out.println("2) Перегенерировать матрицу");
+        System.out.println("3) Ввести слово по его номеру");
+        System.out.println("4) Провести логические выражения над словами");
+        System.out.println("5) Сложение полей Aj и Bj в словах Sj, у которых Vj совпадает с заданным V=000-111");
+        System.out.println("6) Поиск ближайших сверху/снизу");
+    }
+
+    private static void displayWord(Matrix matrix) {
+        int index = readInt("Введите номер слова: ");
+        try {
+            List<Boolean> word = matrix.getWord(index);
+            printList(word);
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println();
+    }
+
+    private static void inputWord(Matrix matrix) {
+        System.out.println("Введите слово (строку из 16 бит, например, 1010101010101010): ");
+        String input = scanner.nextLine();
+        List<Boolean> word = new ArrayList<>();
+        for (char c : input.toCharArray()) {
+            word.add(c == '1');
+        }
+
+        int index = readInt("Введите его позицию: ");
+        try {
+            matrix.setWord(index, word);
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
     }
 
+    private static void performLogicalOperations(Matrix matrix) {
+        int index1 = readInt("Введите номер первого слова: ");
+        int index2 = readInt("Введите номер второго слова: ");
+
+        try {
+            List<Boolean> firstOperand = matrix.getWord(index1);
+            List<Boolean> secondOperand = matrix.getWord(index2);
+
+            System.out.print("Первый операнд: ");
+            printList(firstOperand);
+            System.out.print("\nВторой операнд: ");
+            printList(secondOperand);
+
+            LogicalOperation logicExp = new LogicalOperation(firstOperand, secondOperand);
+
+            System.out.print("\nf1: ");
+            printList(logicExp.firstExpression());
+
+            System.out.print("\nf3: ");
+            printList(logicExp.secondExpression());
+
+            System.out.print("\nf12: ");
+            printList(logicExp.thirdExpression());
+
+            System.out.print("\nf14: ");
+            printList(logicExp.fourthExpression());
+
+            System.out.println();
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void performFieldAddition(Matrix matrix) {
+        System.out.println("Введите 3-битное значение V (например, 101): ");
+        String input = scanner.nextLine();
+        List<Boolean> V = new ArrayList<>();
+        for (char c : input.toCharArray()) {
+            V.add(c == '1');
+        }
+
+        FieldAddition fieldAddition = new FieldAddition(V, matrix);
+
+        System.out.println("Найденные слова:");
+        for (List<Boolean> word : fieldAddition.getFoundWords()) {
+            printList(word);
+            System.out.println();
+        }
+
+        System.out.println("Результат сложения полей Aj и Bj:");
+        for (List<Boolean> word : fieldAddition.getResult()) {
+            printList(word);
+            System.out.println();
+        }
+    }
+
+    private static void findNearestWords(Matrix matrix) {
+        int index = readInt("Введите номер слова: ");
+        NearestWordSearch nearestWordSearch = new NearestWordSearch(matrix, index);
+
+        System.out.println("Ближайшее сверху: ");
+
+        var greater = nearestWordSearch.getNearestGreaterWord();
+        if (greater == null) {
+            System.out.println("Данное слово является максимальным");
+        } else {
+            printList(nearestWordSearch.getNearestGreaterWord());
+        }
+
+        System.out.println("Ближайшее снизу: ");
+        var lower = nearestWordSearch.getNearestLowerWord();
+        if (lower == null) {
+            System.out.println("Данное слово является минимальным");
+        } else {
+            printList(nearestWordSearch.getNearestLowerWord());
+        }
+    }
+
+    private static int readInt(String prompt) {
+        System.out.print(prompt);
+        while (!scanner.hasNextInt()) {
+            System.out.print("Пожалуйста, введите целое число: ");
+            scanner.next();
+        }
+        int value = scanner.nextInt();
+        scanner.nextLine(); // consume the remaining newline
+        return value;
+    }
+
+    private static void printList(List<Boolean> list) {
+        for (Boolean bit : list) {
+            System.out.print(bit ? "1 " : "0 ");
+        }
+        System.out.println();
+    }
 }
