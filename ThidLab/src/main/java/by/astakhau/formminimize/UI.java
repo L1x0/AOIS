@@ -38,7 +38,7 @@ public class UI {
         System.out.print(new GluingDNFCalc(forms.getPDNF()).minimize());
 
         System.out.println("\nРезультат метода Карно:");
-        KarnaughBuilder kb = new KarnaughBuilder(forms.getPCNF());
+        KarnaughBuilder kb = new KarnaughBuilder(forms);
 
         System.out.println("\nКарта Карно:");
         kb.printKMap();

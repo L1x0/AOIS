@@ -1,5 +1,7 @@
 package by.astakhau.formminimize;
 
+import by.astakhau.formminimize.nfbuild.Forms;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,15 +17,18 @@ public class KarnaughBuilder {
     private static final String LETTER_REGEX = "[a-zA-Z]+";
 
     private final String expr;
+
     private final List<Character> vars;
+    private final Forms expression;
     private final List<String> postfix;
     private final Map<String, Boolean> truth;
 
-    public KarnaughBuilder(String expr) {
-        this.expr    = expr;
-        this.vars    = parseVariables(expr);
-        this.postfix = toPostfix(tokenize(expr));
+    public KarnaughBuilder(Forms expression) {
+        this.expr    = expression.getPCNF();
+        this.vars    = parseVariables(expression.getPCNF());
+        this.postfix = toPostfix(tokenize(expression.getPCNF()));
         this.truth   = buildTruthTable();
+        this.expression = expression;
     }
 
     private List<Character> parseVariables(String s) {
@@ -180,9 +185,7 @@ public class KarnaughBuilder {
         List<Set<String>> blocks = generateAllBlocks(targets, grayRows, grayCols);
         List<Set<String>> cover  = coverBlocks(blocks, targets);
 
-        return cover.stream()
-                .map(b -> dnf ? blockToConjunct(b) : blockToDisjunct(b))
-                .collect(Collectors.joining(dnf ? " | " : " & "));
+        return  !dnf ? blockToConjunct(blocks.get(0)) : blockToDisjunct(blocks.get(0));
     }
 
     private List<Set<String>> generateAllBlocks(Set<String> targets, String[] rows, String[] cols) {
@@ -277,6 +280,8 @@ public class KarnaughBuilder {
     private String buildClause(Set<String> block, boolean conjunct) {
         Map<Integer, Character> fixed = findFixedBits(block);
         List<String> lits = new ArrayList<>();
+        GluingDNF dnf  = new GluingDNF(expression.getPDNF());
+        GluingCNF cnf = new GluingCNF(expression.getPCNF());
         for (var e : fixed.entrySet()) {
             char var = vars.get(e.getKey());
             char bit = e.getValue();
@@ -285,7 +290,7 @@ public class KarnaughBuilder {
             lits.add(prefix + var);
         }
         String sep = conjunct ? " & " : " | ";
-        return "(" + String.join(sep, lits) + ")";
+        return conjunct ? reformat(cnf.minimize()) : reformat(dnf.minimize());
     }
 
     private Map<Integer, Character> findFixedBits(Set<String> block) {
@@ -297,5 +302,12 @@ public class KarnaughBuilder {
             if (block.stream().allMatch(s -> s.charAt(finalI) == bit)) fixed.put(i, bit);
         }
         return fixed;
+    }
+
+    private static String reformat(String s) {
+        if ('(' == s.charAt(0) && ')' == s.charAt(s.length() - 1)) {
+            s = s.substring(1, s.length() - 1);
+        }
+        return s;
     }
 }
