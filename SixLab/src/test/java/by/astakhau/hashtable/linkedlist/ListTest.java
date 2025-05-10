@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ListTest {
-    private static MyList<String> list;
+    private static CustomList<String> list;
 
     @BeforeEach
     public void setUp() {
-        list = new MyLinkedList<>();
+        list = new СustomLinkedList<>();
         list.add("A");
         list.add("B");
         list.add("C");

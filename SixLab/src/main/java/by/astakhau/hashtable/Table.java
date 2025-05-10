@@ -1,12 +1,12 @@
 package by.astakhau.hashtable;
 
-import by.astakhau.hashtable.linkedlist.MyLinkedList;
-import by.astakhau.hashtable.linkedlist.MyList;
+import by.astakhau.hashtable.linkedlist.СustomLinkedList;
+import by.astakhau.hashtable.linkedlist.CustomList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Table implements MyHashtable<String, String> {
+public class Table implements CustomHashtable<String, String> {
     private List<Record> records;
 
     private static final int H = 20;
@@ -104,10 +104,10 @@ public class Table implements MyHashtable<String, String> {
     }
 
     private static class Record {
-        private MyList<Node> list;
+        private CustomList<Node> list;
 
         public Record() {
-            this.list = new MyLinkedList<>();
+            this.list = new СustomLinkedList<>();
         }
 
         public void put(String key, String value) {

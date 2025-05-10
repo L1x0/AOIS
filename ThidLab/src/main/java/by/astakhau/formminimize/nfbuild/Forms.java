@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Forms {
     private TrueTable tableObj;
-    private final ArrayList<ArrayList<String>> table;
+    private final List<List<String>> table;
     private final String PDNF;
     private final String PCNF;
     private final String numericPDNF;

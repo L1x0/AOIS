@@ -3,7 +3,7 @@ package by.astakhau.hashtable.linkedlist;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class MyLinkedList<E> implements MyList<E> {
+public class СustomLinkedList<E> implements CustomList<E> {
     private static class Node<E> {
         E data;
         Node<E> prev;

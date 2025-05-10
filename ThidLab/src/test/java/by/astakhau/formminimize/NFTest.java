@@ -42,7 +42,7 @@ public class NFTest {
         TrueTable table = new TrueTable(exp);
         Forms forms = new Forms(table);
 
-        KarnaughBuilder kb = new KarnaughBuilder(forms.getPDNF(), forms.getPCNF());
+        KarnaughBuilder kb = new KarnaughBuilder(forms);
 
         assertEquals("(!c) & (a | b)", kb.getCNF());
         assertEquals("(b & !c) | (a & !c)", kb.getDNF());
@@ -51,7 +51,7 @@ public class NFTest {
         TrueTable table1 = new TrueTable(exp1);
         Forms forms1 = new Forms(table1);
 
-        KarnaughBuilder kb1 = new KarnaughBuilder(forms1.getPDNF(), forms1.getPCNF());
+        KarnaughBuilder kb1 = new KarnaughBuilder(forms1);
 
         assertEquals("(!a | c | !d | !e) & (!b | c | !d | !e)", kb1.getCNF());
         assertEquals("(!e) | (!d) | (!a & !b) | (c)", kb1.getDNF());

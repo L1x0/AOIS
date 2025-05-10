@@ -1,6 +1,6 @@
 package by.astakhau.hashtable.linkedlist;
 
-public interface MyList<E> extends Iterable<E> {
+public interface CustomList<E> extends Iterable<E> {
     void add(E element);
     void add(int index, E element);
     E get(int index);
